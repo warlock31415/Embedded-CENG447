@@ -40,13 +40,6 @@ UART_INIT:
 ldi r16,0x30
 ldi r21,0x00
 
-SIMULATE:
-	ldi r22,(1<<RXC0)
-	sts UCSR0A,r22
-	clr r22
-	ldi r22,0x06
-	sts UDR0,r22
-
 main:	
 	rcall NUM_GEN ;Generate the TX number
 	rcall UART_TX ;Send the Number
@@ -74,9 +67,11 @@ UART_TX:
 UART_RX:
 	push r17
 	lds r17,UCSR0A
-	sbrs r17, RXC0
-		rjmp UART_RX
+	;sbrs r17, RXC0
+		;rjmp UART_RX
 	lds r21, UDR0
+	ldi r17,0x20
+	sts UCSR0A,r17
 	pop r17
 	ret
 
@@ -107,7 +102,7 @@ BLINK:
 	push r17
 	ldi r17,0xFF
 	out DDRB,r17
-	out PORTB,r16
+	out PORTB,r21
 	pop r17
 	ret
 
