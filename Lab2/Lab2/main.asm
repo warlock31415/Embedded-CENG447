@@ -41,15 +41,14 @@ UART_INIT:
 
 main:	
 	lds r17, UCSR0A
-	;sbrc r17, RXC0
-		;rjmp UART_RX
-	andi out_buf,0b00000111 ;Mask to convert ASCII 0-7 to binary
+	sbrc r17, RXC0
+		rjmp UART_RX
+	andi out_buf,0x07 ;Mask to convert ASCII 0-7 to binary
 	rcall UART_TX ;Transmit over UART
-	rcall BLINK ;Turn on LEDS 
+	rcall BLINK ;Turn on LEDs
 	rcall DELAY ;wait 1 second
 	rcall UNBLINK ;Turn off LEDs
 	rcall DELAY
-	inc r16
 	rcall main
 
 UART_TX:

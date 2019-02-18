@@ -24,11 +24,11 @@
  <LABELS>
   <UART_INIT><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>22</LINE></UART_INIT>
   <main><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>42</LINE></main>
-  <UART_TX><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>55</LINE></UART_TX>
-  <BLINK><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>82</LINE></BLINK>
-  <DELAY><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>68</LINE></DELAY>
-  <UNBLINK><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>90</LINE></UNBLINK>
-  <UART_RX><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>64</LINE></UART_RX>
-  <DELAY_LOOP><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>72</LINE></DELAY_LOOP>
+  <UART_RX><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>63</LINE></UART_RX>
+  <UART_TX><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>54</LINE></UART_TX>
+  <BLINK><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>81</LINE></BLINK>
+  <DELAY><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>67</LINE></DELAY>
+  <UNBLINK><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>89</LINE></UNBLINK>
+  <DELAY_LOOP><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>71</LINE></DELAY_LOOP>
  </LABELS>
 </ASSEMBLER_INFO>
