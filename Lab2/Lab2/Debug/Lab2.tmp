@@ -1,0 +1,36 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.2.7</VERSION>
+ <DEVICE>"ATmega328P"</DEVICE>
+ <WORKING_DIR>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\Debug\Lab2.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>Lab2.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>Lab2.map</FILE>
+  <FILE>Lab2.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <UART_INIT><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>22</LINE></UART_INIT>
+  <SIMULATE><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>43</LINE></SIMULATE>
+  <main><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>50</LINE></main>
+  <NUM_GEN><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>97</LINE></NUM_GEN>
+  <UART_TX><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>65</LINE></UART_TX>
+  <UART_RX><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>74</LINE></UART_RX>
+  <BLINK><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>106</LINE></BLINK>
+  <DELAY><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>83</LINE></DELAY>
+  <UNBLINK><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>114</LINE></UNBLINK>
+  <DELAY_LOOP><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm</FILE><LINE>87</LINE></DELAY_LOOP>
+ </LABELS>
+</ASSEMBLER_INFO>
