@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm Sun Feb 17 20:17:36 2019
+AVRASM ver. 2.2.7  C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.asm Sun Feb 17 21:29:01 2019
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
@@ -1000,10 +1000,10 @@ AVRASM ver. 2.2.7  C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.as
                                  .def uart_buf2 = r19
                                  
                                  ;Initialize SP
-000000 efff                      LDI	ZH, low(RAMEND)
-000001 bffd                      OUT	SPL, ZH
-000002 e0f8                      LDI	ZH, high(RAMEND)
-000003 bffe                      OUT	SPH, ZH
+000000 ef7f                      LDI	r23, low(RAMEND)
+000001 bf7d                      OUT	SPL, r23
+000002 e078                      LDI	r23, high(RAMEND)
+000003 bf7e                      OUT	SPH, r23
                                  
                                  UART_INIT:
 000004 932f                      	push uart_buf
@@ -1027,62 +1027,58 @@ AVRASM ver. 2.2.7  C:\Users\7410983\Documents\Atmel Studio\7.0\Lab2\Lab2\main.as
                                  
                                  main:	
 000019 9110 00c0                 	lds r17, UCSR0A
-00001b fd17                      	sbrc r17, RXC0
-00001c c00e                      		rjmp UART_RX
-                                 	
-00001d d01f                      	rcall BLINK
-00001e d014                      	rcall DELAY
-00001f d023                      	rcall UNBLINK
-000020 d012                      	rcall DELAY
-000021 dff7                      	rcall main
+                                 	;sbrc r17, RXC0
+                                 		;rjmp UART_RX
+00001b 7007                      	andi out_buf,0b00000111 ;Mask to convert ASCII 0-7 to binary
+00001c d006                      	rcall UART_TX ;Transmit over UART
+00001d d01b                      	rcall BLINK ;Turn on LEDS 
+00001e d010                      	rcall DELAY ;wait 1 second
+00001f d01f                      	rcall UNBLINK ;Turn off LEDs
+000020 d00e                      	rcall DELAY
+000021 9503                      	inc r16
+000022 dff6                      	rcall main
                                  
                                  UART_TX:
-000022 931f                      	push r17
-000023 9110 00c0                 	lds r17, UCSR0A
-000025 ff15                      	sbrs r17, UDRE0 ; Skip if bit in register is set
-000026 cffb                      		rjmp UART_TX
-000027 9300 00c6                 	sts UDR0, out_buf ;Store to data space
-000029 911f                      	pop r17
-00002a 9508                      	ret
+000023 931f                      	push r17
+000024 9110 00c0                 	lds r17, UCSR0A
+000026 ff15                      	sbrs r17, UDRE0 ; Skip if bit in register is set
+000027 cffb                      		rjmp UART_TX
+000028 9300 00c6                 	sts UDR0, out_buf ;Store to data space
+00002a 911f                      	pop r17
+00002b 9508                      	ret
                                  
                                  UART_RX:
-00002b 931f                      	push r17
-00002c 9110 00c0                 	lds r17,UCSR0A
-                                 	;sbrs r17, RXC0
-                                 		;rjmp UART_RX
-00002e 9100 00c6                 	lds out_buf, UDR0
-000030 911f                      	pop r17
-000031 cff0                      	rjmp UART_TX
-000032 9508                      	ret
+00002c 9100 00c6                 	lds out_buf, UDR0
+00002e 9508                      	ret
                                  
                                  DELAY: 
-000033 e0b1                      	ldi XH,0x01
-000034 e0a4                      	ldi XL,0x04
-000035 e5d3                      	ldi YH,0x53
+00002f e051                      	ldi r21,0x01
+000030 e064                      	ldi r22,0x04
+000031 e573                      	ldi r23,0x53
                                  	DELAY_LOOP:
-000036 95ba                      		dec XH     ; 1 clk cycle
-000037 f7f1                      		brne DELAY_LOOP ; 2 clk cycles (1 if true)
-000038 95aa                      		dec XL     ; 1 clc cycle
-000039 f7e1                      		brne DELAY_LOOP ; 2 clk cycles
-00003a 95da                      		dec YH
-00003b f7d1                      		brne DELAY_LOOP
-00003c 9508                      	ret  
+000032 955a                      		dec r21     ; 1 clk cycle
+000033 f7f1                      		brne DELAY_LOOP ; 2 clk cycles (1 if true)
+000034 956a                      		dec r22    ; 1 clc cycle
+000035 f7e1                      		brne DELAY_LOOP ; 2 clk cycles
+000036 957a                      		dec r23
+000037 f7d1                      		brne DELAY_LOOP
+000038 9508                      	ret  
                                  	
                                  
                                  BLINK:
-00003d 931f                      	push r17
-00003e ef1f                      	ldi r17,0xFF
-00003f b914                      	out DDRB,r17
-000040 b905                      	out PORTB,r16
-000041 911f                      	pop r17
-000042 9508                      	ret
+000039 931f                      	push r17
+00003a e017                      	ldi r17,0x07 ;Set first 3 bits of DDRB to output
+00003b b914                      	out DDRB,r17 ;
+00003c b905                      	out PORTB,out_buf ;Write the pressed number to LEDs
+00003d 911f                      	pop r17
+00003e 9508                      	ret
                                  
                                  UNBLINK:
-000043 931f                      	push r17
-000044 2711                      	clr r17
-000045 b915                      	out PORTB,r17
-000046 911f                      	pop r17
-000047 9508                      	ret
+00003f 931f                      	push r17
+000040 2711                      	clr r17
+000041 b915                      	out PORTB,r17 ;Clear all pins on PORTB
+000042 911f                      	pop r17
+000043 9508                      	ret
                                  
                                  
                                  
@@ -1107,14 +1103,14 @@ counted separately from r26..r31 here.
 "ATmega328P" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:   4 r17:  17 r18:  10 r19:   4 r20:   0 
-r21:   0 r22:   0 r23:   0 r24:   0 r25:   0 r26:   2 r27:   2 r28:   0 
-r29:   2 r30:   0 r31:   4 
-Registers used: 8 out of 35 (22.9%)
+r13:   0 r14:   0 r15:   0 r16:   6 r17:  13 r18:  10 r19:   4 r20:   0 
+r21:   2 r22:   2 r23:   6 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
+r29:   0 r30:   0 r31:   0 
+Registers used: 7 out of 35 (20.0%)
 
 "ATmega328P" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
-andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
+andi  :   1 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
 brcc  :   0 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
 brne  :   3 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
@@ -1122,22 +1118,22 @@ brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   0 cbr   :   0
 clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   1 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
 cpi   :   0 cpse  :   0 dec   :   3 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   0 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :  10 lds   :   6 lpm   :   0 lsl   :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   1 jmp   :   0 
+ld    :   0 ldd   :   0 ldi   :  10 lds   :   5 lpm   :   0 lsl   :   0 
 lsr   :   0 mov   :   0 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   0 or    :   0 ori   :   1 out   :   5 pop   :   6 
-push  :   6 rcall :   5 ret   :   5 reti  :   0 rjmp  :   3 rol   :   0 
+neg   :   0 nop   :   0 or    :   0 ori   :   1 out   :   5 pop   :   5 
+push  :   5 rcall :   6 ret   :   5 reti  :   0 rjmp  :   1 rol   :   0 
 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   0 
-sbiw  :   0 sbr   :   0 sbrc  :   1 sbrs  :   1 sec   :   0 seh   :   0 
+sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   1 sec   :   0 seh   :   0 
 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   5 
 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 15 out of 113 (13.3%)
+Instructions used: 16 out of 113 (14.2%)
 
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000090    144      0    144   32768   0.4%
+[.cseg] 0x000000 0x000088    136      0    136   32768   0.4%
 [.dseg] 0x000100 0x000100      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
