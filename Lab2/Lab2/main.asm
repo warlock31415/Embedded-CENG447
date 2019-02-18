@@ -37,22 +37,17 @@ UART_INIT:
 	pop uart_buf2 
 	pop uart_buf
 
-ldi r16,0x30
-ldi r21,0x00
+	ldi out_buf,0x00
 
 main:	
-	rcall NUM_GEN ;Generate the TX number
-	rcall UART_TX ;Send the Number
-
 	lds r17, UCSR0A
 	sbrc r17, RXC0
 		rjmp UART_RX
-
+	
 	rcall BLINK
 	rcall DELAY
 	rcall UNBLINK
-	;Reinitialize delay and num gen
-	inc r16
+	rcall DELAY
 	rcall main
 
 UART_TX:
@@ -69,10 +64,9 @@ UART_RX:
 	lds r17,UCSR0A
 	;sbrs r17, RXC0
 		;rjmp UART_RX
-	lds r21, UDR0
-	ldi r17,0x20
-	sts UCSR0A,r17
+	lds out_buf, UDR0
 	pop r17
+	rjmp UART_TX
 	ret
 
 DELAY: 
@@ -89,20 +83,11 @@ DELAY:
 	ret  
 	
 
-NUM_GEN:
-	push r20
-	cpi r16,0x38
-	in  r20,SREG
-	sbrs r20,2
-		ldi r16,0x030
-	pop r20
-	ret
-
 BLINK:
 	push r17
 	ldi r17,0xFF
 	out DDRB,r17
-	out PORTB,r21
+	out PORTB,r16
 	pop r17
 	ret
 
@@ -111,7 +96,6 @@ UNBLINK:
 	clr r17
 	out PORTB,r17
 	pop r17
-	rcall DELAY
 	ret
 
 
