@@ -6,17 +6,19 @@
 ;
 
 
-; 
-
 .EQU F_CPU = 16000000
 .EQU BAUDRATE = 9600
 .EQU BAUD_PRESCALE = F_CPU/(BAUDRATE*16)-1
 
-.DEF out_buf = r16
-.DSEG .
+.DEF out_buf = r16		;Output buffer
+.DEF state = r24		;To check which function were in
+
+.DSEG 
 pass: .BYTE 4
 
 .CSEG
+
+;;		The Menu
 menu1: .DB '\r','\n',"******************************************",'\r','\n'
 menu2: .DB 9,9,"MENU",'\r','\n'
 menu3: .DB "******************************************",'\r','\n'
@@ -25,22 +27,28 @@ menu5: .DB "Press"		,9,		"'U'"		,9,		"To unlock system",'\r','\n'
 menu6: .DB "Press"		,9,		"'R'"		,9,		"To set a new security code",'\r','\n'
 menu7: .DB "******************************************",'\r','\n',0,0
 
+;; Print if an error occurs
 error_string: .DB '\r','\n',"Pressed the wrong button?",'\r','\n',0
 
+;; Print to ask for user input as appropriate
 enter_pass: .DB '\r','\n',"Enter Passcode:",0
 new_pass: .DB '\r','\n',"Enter new passcode:",0
 
+;; Print when an action is complete
 lock_it: .DB '\r','\n',7,9,9,"LOCKED",0
 unlock_it: .DB '\r','\n',7,9,9,"UNLOCKED",0
+;; 9 is a horizontal tab
+;; 7 is Bell, this makes a DING sound in Putty when an action is completed
 
-//The second 0 is added just to satisfy the assembler. It expects .DB to define an even number of bytes. If a odd number is specified
-//the assembler throughs a warning that it had to pad the byte to make it even number of bytes
+;;The second 0 is added just to satisfy the assembler. It expects .DB to define an even number
+;; of bytes. If a odd number is specifiedthe assembler throughs a warning that it had to pad 
+;; the byte to make it even number of bytes
 def_pass: .DB "1234"
 
-LDI r18,0xFF
-STS DDRB,r18
+LDI r18,0xFF	; Set all bits 
+STS DDRB,r18	; Set all pins as output
 
-;Initialize Stack pointer
+;;Initialize Stack pointer
 Stack:
 	PUSH r23
 	LDI	r23, low(RAMEND)
@@ -49,7 +57,8 @@ Stack:
 	OUT	SPH, r23
 	POP r23
 
-Uart_init:;Initialize UART 
+;;Initialize UART
+Uart_init: 
 	PUSH r22
 	PUSH r23
 	LDS r22,UCSR0B
@@ -67,27 +76,33 @@ Uart_init:;Initialize UART
 	POP r23
 	POP r22
 
+;;Lock device on startup
 RJMP Lock
 
+;;Main function
+/**
+* @details				Main loop
+* @return				void	
+**/
 Main:
-	RCALL Print_menu
-	RCALL Uart_Rx\
-	;LDI out_buf,0x4C
-	RJMP Get_state
+	RCALL Print_menu	;Print the menu
+	RCALL Uart_Rx		;Wait for Input from the menu
+	RJMP Get_state		;Parse the input
 	done:
-	RJMP Main
+	RJMP Main			;loop back
 
 
+;; Transmit function
 /**
 * @details				Transmit over UART
 * @param[in]  out_buf	A byte of data to transmit over UART
 * @return				void	
 **/
 Uart_Tx:
-	LDS r17,UCSR0A
-	SBRS r17,UDRE0
-		RJMP Uart_Tx
-	STS UDR0,out_buf ;Write to UDR0 from R16
+	LDS r17,UCSR0A		; Load control register
+	SBRS r17,UDRE0		; Check for TX complete
+		RJMP Uart_Tx	; Try again if it's not
+	STS UDR0,out_buf	;Write to UDR0 from R16
 	CLR r17
 	RET
 
@@ -97,12 +112,12 @@ Uart_Tx:
 * @return				void	
 **/
 Uart_Rx:
-	LDS r17,UCSR0A
-	SBRS r17, RXC0
-		RJMP Uart_Rx
-	LDS out_buf,UDR0
-	CLR r17
-	RCALL Uart_Tx
+	LDS r17,UCSR0A		;Load control register
+	SBRS r17, RXC0		;Check if data is received
+		RJMP Uart_Rx	;Try again if no data
+	LDS out_buf,UDR0    ;Load data from UDR0
+	CLR r17				;Clear r17
+	RCALL Uart_Tx		;Echo keypress
 	RET
 
 
@@ -113,10 +128,10 @@ Uart_Rx:
 * @return					void
 **/
 Print_menu:
-	LDI ZL,low(menu1*2)
+	LDI ZL,low(menu1*2)		;Load the menu address
 	LDI ZH,high(menu1*2)
-	Send_byte:
-		LPM out_buf,Z+
+	Send_byte:				;Load data till it hits a null character
+		LPM out_buf,Z+		;and send it over UART
 		CPI out_buf,0x00
 			BREQ exit
 		RCALL Uart_Tx
@@ -130,82 +145,104 @@ Print_menu:
 * @return					void
 **/
 Get_state:
-	L:
-		CPI out_buf,0x4C
-		BREQ Lock
-	U:
-		CPI out_buf,0x55
-		BREQ Ulock
-	R:
-		CPI out_buf,0x52
-		BREQ RESET
+	L:						;case 'L'
+		CPI out_buf,0x4C	;if (out_buf == 'L')
+		BREQ Lock			;go to the Lock subroutine
 
-	Error:
-		LDI ZL,low(error_string*2)
+	U:						;case 'U'
+		CPI out_buf,0x55	;if(out_buf == 'U')
+		BREQ Ulock			;go to the Unlock subroutine
+
+	R:						;case 'R'
+		CPI out_buf,0x52    ;if(out_buf == 'R')
+		BREQ RESET			;go to the Reset subroutine
+
+	Error:							;default
+		LDI ZL,low(error_string*2)	;Load address of the error message
 		LDI ZH,high(error_string*2)
-		RCALL Send_byte
-		RJMP Main
+		RCALL Send_byte				;Print error message
+		RJMP Main					;Try again
 		
 /**
 * @details				Turns on PORTB pin 1
 * @return				void
 **/
 Lock:	
-	CLR r18
-	OUT PORTB, r18
-	LDI r18,0x01
+	CLR r18					;Clear R18
+	OUT PORTB, r18			;Pull all pins LOW
+	LDI r18,0x01			;Pull pin 8 on the arduino HIGH
 	OUT PORTB,r18
-	LDI ZL,low(lock_it*2)
+	LDI ZL,low(lock_it*2)	;Load the lock message address
 	LDI ZH,high(lock_it*2)
-	RCALL Send_byte
-	RJMP Main
+	RCALL Send_byte			;Print lock message
+	RJMP Main				;Print Menu
 
-
+/**
+* @details				Waits for the passcode. If the correct passcode is pressed
+*						unlock by pulling pin 2 on PORTB HIGH
+* @param[in]	state	Needs to be cleared to indicate that the safe is unlocked
+* @return				void
+**/
 Ulock:
-	CLR r24
-	LDI ZL,low(enter_pass*2)
+	LDI ZL,low(enter_pass*2)	;Load the enter pass message address
 	LDI ZH,high(enter_pass*2)
-	RCALL Send_byte
-	RJMP Check_bytes
+	RCALL Send_byte				;Print the enter pass message
+	RJMP Check_bytes			;Check if the pass entered is correct
 	Ulock_it:
-		LDI ZL,low(unlock_it*2)
+		CLR state				;Clear state register
+		LDI ZL,low(unlock_it*2)	;Load unlock message address
 		LDI ZH,high(unlock_it*2)
-		RCALL Send_byte
-		OUT PORTB, r24
-		LDI r18, 0x02
-		OUT PORTB,r18
+		RCALL Send_byte			;Print the unlock message
+		OUT PORTB, state		;Pull all pins LOW
+		LDI r18, 0x02			;Pull pin 9 HIGH
+		OUT PORTB,r18			
 	RJMP Main
 
-
+/**
+* @details				Waits for the passcode. If correct, waits for the new passcode.
+*						Stores new passcode in SRAM
+* @param[in]	state	Needs to be set to indicate that the safe is being reset
+* @return				void
+**/
 RESET:
-	LDI r24,0xFF
-	LDI ZL,low(enter_pass*2)
+	LDI state,0xFF				;Set state register
+	LDI ZL,low(enter_pass*2)	;Load enter pass message address
 	LDI ZH,high(enter_pass*2)
-	RCALL Send_byte
-	RJMP Check_bytes
+	RCALL Send_byte				;Print enter pass message
+	RJMP Check_bytes			;Check if entered pass is correct
 	Reset_it:
-		RCALL Get_new_pass
-		LDI out_buf,0x07
-		RCALL Uart_Tx
+		RCALL Get_new_pass		;Get the new pass
+		LDI out_buf,0x07		;Make the bell sound ---- MIGHT NEED TO CHANGE
+		;RCALL Uart_Tx
 	RJMP Main
 
+/**
+* @details				Waits for each individual byte moves them into storage registers	
+* @return				void
+**/
 Check_bytes:
-	RCALL Uart_Rx
-	MOV r19,out_buf
-	RCALL uart_Rx
-	MOV r20,out_buf
-	RCALL Uart_Rx
-	MOV r21,out_buf
-	RCALL Uart_Rx
-	MOV r22,out_buf
-	RJMP Check_pass
+	RCALL Uart_Rx				;Wait for first byte of pass
+	MOV r19,out_buf				;Store first byte
+	RCALL uart_Rx				;Wait for byte 2
+	MOV r20,out_buf				;Store byte 2
+	RCALL Uart_Rx				;Wait for byte 3
+	MOV r21,out_buf				;Store byte 3
+	RCALL Uart_Rx				;Wait for byte 4
+	MOV r22,out_buf				;Store byte 4
+
+	RJMP Check_pass				;Check if the pass is correct
 	RJMP Main
 
+/**
+* @details				Checks if the entered pass matches the stored pass
+* @params[in]	state	Branch depending on if state is cleared or set
+* @return				void
+**/
 Check_pass:
-	LDI ZH, high(def_pass*2)
+	LDI ZH, high(def_pass*2)	;Load the address of the pass ------ NEED TO CHANGE TO ADDRESS IN SRAM
 	LDI ZL, low(def_pass*2)
 	COMP:
-		LPM r23,Z+
+		LPM r23,Z+				;Check if each byte is equal to the entered byte
 		CP r23,r19
 			BRNE Error
 		LPM r23,Z+
@@ -217,36 +254,45 @@ Check_pass:
 		LPM r23,Z
 		CP r23,r22
 			BRNE Error
-		SBRS r24,1
-			RJMP Ulock_it
-		RJMP Reset_it
+		SBRS r24,1			;If bit in register is clear
+			RJMP Ulock_it	;the unlock subroutine called it
+		RJMP Reset_it		;Else, the reset subroutine called it
 
+/**
+* @details				Gets the new pass and stores each byte into a register
+* @return				void
+**/
 Get_new_pass:
-	LDI ZH, high(new_pass*2)
+	LDI ZH, high(new_pass*2) ;Ask user to enter new pass
 	LDI ZL, low(new_pass*2)
 	RCALL Send_byte
-	RCALL Uart_Rx
-	MOV r19,out_buf
+
+	RCALL Uart_Rx	;Process each key input
+	MOV r19,out_buf	;Store keyinputs
 	RCALL uart_Rx
 	MOV r20,out_buf
 	RCALL Uart_Rx
 	MOV r21,out_buf
 	RCALL Uart_Rx
 	MOV r22,out_buf
-	RCALL Store_pass
+
+	RCALL Store_pass ;Store pass is SRAM
 	RET
 
+/**
+* @details				Store new pass in SRAM
+* @param[in]	R19:R22	Bits containing the new passcode
+* @return				void
+**/
 Store_pass:
-	LDI ZH, high(pass)
-	LDI ZL, low(pass)
+	LDI ZH,high(pass)
+	LDI ZL,low(pass)
+	LDI r19,0x32
 	ST Z+,r19
-	ST Z+,r20
-	ST Z+,r21
-	ST Z, r22
-	LDS r19,pass
+	ST Z+,r19
+	ST Z+,r19
+	ST Z,r19
+	MOV out_buf,r19
 	RCALL Uart_Tx
 	RET
-
-		
-
-
+	
