@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm Mon Mar 11 22:03:13 2019
+AVRASM ver. 2.2.7  C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm Tue Mar 12 11:41:36 2019
 
 
 EQU  SIGNATURE_000 0000001e
@@ -714,28 +714,28 @@ CSEG new_pass     0000008e
 CSEG lock_it      00000099
 CSEG unlock_it    0000009f
 CSEG def_pass     000000a6
-CSEG Stack        000000ab
-CSEG Uart_init    000000b1
-CSEG Store_def_pass 000000c5
-CSEG Lock         000000f9
-CSEG Main         000000d2
-CSEG Print_menu   000000e7
-CSEG Uart_Rx      000000de
-CSEG Get_state    000000ef
-CSEG done         000000d5
-CSEG Uart_Tx      000000d6
-CSEG Send_byte    000000e9
-CSEG exit         000000ee
-CSEG L            000000ef
-CSEG U            000000f1
-CSEG Ulock        00000101
-CSEG R            000000f3
-CSEG RESET        0000010d
-CSEG Error        000000f5
-CSEG Get_bytes    00000119
-CSEG Ulock_it     00000106
-CSEG Reset_it     00000112
-CSEG Get_new_pass 00000134
-CSEG Check_pass   00000123
-CSEG COMP         00000125
-CSEG Store_pass   00000141
+CSEG Stack        000000aa
+CSEG Uart_init    000000b0
+CSEG Store_def_pass 000000c4
+CSEG Lock         000000f8
+CSEG Main         000000d1
+CSEG Print_menu   000000e6
+CSEG Uart_Rx      000000dd
+CSEG Get_state    000000ee
+CSEG done         000000d4
+CSEG Uart_Tx      000000d5
+CSEG Send_byte    000000e8
+CSEG exit         000000ed
+CSEG L            000000ee
+CSEG U            000000f0
+CSEG Ulock        00000100
+CSEG R            000000f2
+CSEG RESET        0000010c
+CSEG Error        000000f4
+CSEG Get_bytes    0000011a
+CSEG Ulock_it     00000105
+CSEG Reset_it     00000111
+CSEG Get_new_pass 00000135
+CSEG Check_pass   00000124
+CSEG COMP         00000126
+CSEG Store_pass   00000142

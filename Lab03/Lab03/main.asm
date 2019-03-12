@@ -47,7 +47,7 @@ unlock_it: .DB '\r','\n',7,9,9,"UNLOCKED",0
 def_pass: .DB "1234"
 
 LDI r18,0xFF	; Set all bits 
-STS DDRB,r18	; Set all pins as output
+OUT DDRB,r18	; Set all pins as output
 
 ;;Initialize Stack pointer
 Stack:
@@ -240,6 +240,8 @@ RESET:
 		RCALL Get_new_pass		;Get the new pass
 		CLR r18
 		OUT PORTB,r18
+	SBRC state,1
+		RJMP Ulock_it
 	RJMP Lock
 	RJMP Main
 
