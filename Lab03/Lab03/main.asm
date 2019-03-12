@@ -191,6 +191,7 @@ Get_state:
 * @return				void
 **/
 Lock:	
+	ORI state,0x01
 	CLR r18					;Clear R18
 	OUT PORTB, r18			;Pull all pins LOW
 	LDI r18, (1<<0)			;Pull pin 8 on the arduino HIGH
@@ -228,7 +229,7 @@ Ulock:
 * @return				void
 **/
 RESET:
-	LDI state,0xFF				;Set state register to indicate reset mode
+	ORI state,0x02				;Set state register to indicate reset mode
 	LDI ZL,low(enter_pass<<1)	;Load enter pass message address
 	LDI ZH,high(enter_pass<<1)
 	RCALL Send_byte				;Print enter pass message
@@ -240,7 +241,7 @@ RESET:
 		RCALL Get_new_pass		;Get the new pass
 		CLR r18
 		OUT PORTB,r18
-	SBRC state,1
+	SBRS state,0
 		RJMP Ulock_it
 	RJMP Lock
 	RJMP Main
@@ -284,7 +285,7 @@ Check_pass:
 		CP r23,r22
 			BRNE Error
 
-		SBRS state,1			;If bit in register is clear
+		SBRS state,1			;If bit 1 in register is clear
 			RJMP Ulock_it		;the unlock subroutine called it
 		RJMP Reset_it			;Else, the reset subroutine called it
 

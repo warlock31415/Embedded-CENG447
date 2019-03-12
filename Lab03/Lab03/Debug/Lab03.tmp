@@ -50,16 +50,16 @@
   <exit><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>162</LINE></exit>
   <L><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>171</LINE></L>
   <U><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>175</LINE></U>
-  <Ulock><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>209</LINE></Ulock>
+  <Ulock><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>210</LINE></Ulock>
   <R><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>179</LINE></R>
-  <RESET><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>230</LINE></RESET>
+  <RESET><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>231</LINE></RESET>
   <Error><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>183</LINE></Error>
-  <Get_bytes><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>252</LINE></Get_bytes>
-  <Ulock_it><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>215</LINE></Ulock_it>
-  <Reset_it><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>237</LINE></Reset_it>
-  <Get_new_pass><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>295</LINE></Get_new_pass>
-  <Check_pass><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>270</LINE></Check_pass>
-  <COMP><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>273</LINE></COMP>
-  <Store_pass><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>317</LINE></Store_pass>
+  <Get_bytes><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>253</LINE></Get_bytes>
+  <Ulock_it><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>216</LINE></Ulock_it>
+  <Reset_it><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>238</LINE></Reset_it>
+  <Get_new_pass><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>296</LINE></Get_new_pass>
+  <Check_pass><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>271</LINE></Check_pass>
+  <COMP><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>274</LINE></COMP>
+  <Store_pass><FILE>C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm</FILE><LINE>318</LINE></Store_pass>
  </LABELS>
 </ASSEMBLER_INFO>
