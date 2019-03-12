@@ -11,13 +11,14 @@
 .EQU BAUD_PRESCALE = F_CPU/(BAUDRATE*16)-1
 
 .DEF out_buf = r16		;Output buffer
-.DEF state = r24		;To check which function were in
+.DEF state = r24		;To check which function we're in
 
 .DSEG 
 pass: .BYTE 4
 
-.CSEG
 
+
+.CSEG
 ;;		The Menu
 menu1: .DB '\r','\n',"******************************************",'\r','\n'
 menu2: .DB 9,9,"MENU",'\r','\n'
@@ -40,7 +41,7 @@ unlock_it: .DB '\r','\n',7,9,9,"UNLOCKED",0
 ;; 9 is a horizontal tab
 ;; 7 is Bell, this makes a DING sound in Putty when an action is completed
 
-;;The second 0 is added just to satisfy the assembler. It expects .DB to define an even number
+;; The second 0 is added just to satisfy the assembler. It expects .DB to define an even number
 ;; of bytes. If a odd number is specifiedthe assembler throughs a warning that it had to pad 
 ;; the byte to make it even number of bytes
 def_pass: .DB "1234"
@@ -75,6 +76,24 @@ Uart_init:
 	STS UBRR0L,r23
 	POP r23
 	POP r22
+
+Store_def_pass:
+	LDI ZH,high(def_pass<<1)
+	LDI ZL,low(def_pass<<1)
+
+	LDI YH,high(pass<<1)
+	LDI YL,low(pass<<1)
+
+	LPM r19,Z+
+	ST Y+,r19
+	LPM r19,Z+
+	ST Y+,r19
+	LPM r19,Z+
+	ST Y+,r19
+	LPM r19,Z
+	ST Y,r19
+
+
 
 ;;Lock device on startup
 RJMP Lock
@@ -184,12 +203,12 @@ Lock:
 * @return				void
 **/
 Ulock:
+	CLR state				;Clear state register
 	LDI ZL,low(enter_pass*2)	;Load the enter pass message address
 	LDI ZH,high(enter_pass*2)
 	RCALL Send_byte				;Print the enter pass message
-	RJMP Check_bytes			;Check if the pass entered is correct
+	RJMP Get_bytes				;Get pass from user and check if the pass entered is correct
 	Ulock_it:
-		CLR state				;Clear state register
 		LDI ZL,low(unlock_it*2)	;Load unlock message address
 		LDI ZH,high(unlock_it*2)
 		RCALL Send_byte			;Print the unlock message
@@ -209,18 +228,24 @@ RESET:
 	LDI ZL,low(enter_pass*2)	;Load enter pass message address
 	LDI ZH,high(enter_pass*2)
 	RCALL Send_byte				;Print enter pass message
-	RJMP Check_bytes			;Check if entered pass is correct
+
+	RJMP Get_bytes			;Check if entered pass is correct
 	Reset_it:
+		LDI r18,(1<<2)
+		OUT PORTB,r18
 		RCALL Get_new_pass		;Get the new pass
 		LDI out_buf,0x07		;Make the bell sound ---- MIGHT NEED TO CHANGE
-		;RCALL Uart_Tx
+		RCALL Uart_Tx
+		CLR r18
+		OUT PORTB,r18
+	RJMP Lock
 	RJMP Main
 
 /**
 * @details				Waits for each individual byte moves them into storage registers	
 * @return				void
 **/
-Check_bytes:
+Get_bytes:
 	RCALL Uart_Rx				;Wait for first byte of pass
 	MOV r19,out_buf				;Store first byte
 	RCALL uart_Rx				;Wait for byte 2
@@ -239,22 +264,23 @@ Check_bytes:
 * @return				void
 **/
 Check_pass:
-	LDI ZH, high(def_pass*2)	;Load the address of the pass ------ NEED TO CHANGE TO ADDRESS IN SRAM
-	LDI ZL, low(def_pass*2)
+	LDI ZH, high(pass<<1)	;Load the address of the pass ------ NEED TO CHANGE TO ADDRESS IN SRAM
+	LDI ZL, low(pass<<1)
 	COMP:
-		LPM r23,Z+				;Check if each byte is equal to the entered byte
+		LD r23,Z+				;Check if each byte is equal to the entered byte
 		CP r23,r19
 			BRNE Error
-		LPM r23,Z+
+		LD r23,Z+
 		CP r23,r20
 			BRNE Error
-		LPM r23,Z+
+		LD r23,Z+
 		CP r23,r21
 			BRNE Error
-		LPM r23,Z
+		LD r23,Z
 		CP r23,r22
 			BRNE Error
-		SBRS r24,1			;If bit in register is clear
+
+		SBRS state,1		;If bit in register is clear
 			RJMP Ulock_it	;the unlock subroutine called it
 		RJMP Reset_it		;Else, the reset subroutine called it
 
@@ -263,8 +289,8 @@ Check_pass:
 * @return				void
 **/
 Get_new_pass:
-	LDI ZH, high(new_pass*2) ;Ask user to enter new pass
-	LDI ZL, low(new_pass*2)
+	LDI ZH, high(new_pass<<1) ;Ask user to enter new pass
+	LDI ZL, low(new_pass<<1)
 	RCALL Send_byte
 
 	RCALL Uart_Rx	;Process each key input
@@ -285,14 +311,12 @@ Get_new_pass:
 * @return				void
 **/
 Store_pass:
-	LDI ZH,high(pass)
-	LDI ZL,low(pass)
-	LDI r19,0x32
-	ST Z+,r19
-	ST Z+,r19
-	ST Z+,r19
-	ST Z,r19
-	MOV out_buf,r19
-	RCALL Uart_Tx
+	LDI YH,high(pass<<1)
+	LDI YL,low(pass<<1)
+
+	ST Y+,r19
+	ST Y+,r20
+	ST Y+,r21
+	ST Y,r22
+
 	RET
-	
