@@ -2,7 +2,7 @@
 ; Lab03.asm
 ;
 ; Created: 3/4/2019 8:49:32 PM
-; Author : 7410983
+; Author : Pratik Sinai Kunkolienker
 ;
 
 
@@ -234,8 +234,6 @@ RESET:
 		LDI r18,(1<<2)
 		OUT PORTB,r18
 		RCALL Get_new_pass		;Get the new pass
-		LDI out_buf,0x07		;Make the bell sound ---- MIGHT NEED TO CHANGE
-		RCALL Uart_Tx
 		CLR r18
 		OUT PORTB,r18
 	RJMP Lock
