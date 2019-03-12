@@ -77,16 +77,20 @@ Uart_init:
 	POP r23
 	POP r22
 
+/**
+* @details				Retrieve default password from flash and store it in SRAM
+* @return				void	
+**/
 Store_def_pass:
-	LDI ZH,high(def_pass<<1)
-	LDI ZL,low(def_pass<<1)
+	LDI ZH,high(def_pass<<1)		;Load high byte of the def_pass address
+	LDI ZL,low(def_pass<<1)			;Load low byte of the def_pass address
+		
+	LDI YH,high(pass<<1)			;Load high byte of the pass address in SRAM
+	LDI YL,low(pass<<1)				;Load low byte of the pass address in SRAM
 
-	LDI YH,high(pass<<1)
-	LDI YL,low(pass<<1)
-
-	LPM r19,Z+
-	ST Y+,r19
-	LPM r19,Z+
+	LPM r19,Z+						;Load from flash
+	ST Y+,r19						;Store to SRAM
+	LPM r19,Z+						;Repeat for all 4 bytes
 	ST Y+,r19
 	LPM r19,Z+
 	ST Y+,r19
@@ -147,11 +151,11 @@ Uart_Rx:
 * @return					void
 **/
 Print_menu:
-	LDI ZL,low(menu1*2)		;Load the menu address
-	LDI ZH,high(menu1*2)
-	Send_byte:				;Load data till it hits a null character
-		LPM out_buf,Z+		;and send it over UART
-		CPI out_buf,0x00
+	LDI ZL,low(menu1<<1)		;Load the menu address (Needs to be left shifted by 1 to get to the 
+	LDI ZH,high(menu1<<1)		;correct address)
+	Send_byte:				
+		LPM out_buf,Z+			;Load data till it hits a null character
+		CPI out_buf,0x00		;and send it over UART
 			BREQ exit
 		RCALL Uart_Tx
 		RJMP Send_byte
@@ -177,8 +181,8 @@ Get_state:
 		BREQ RESET			;go to the Reset subroutine
 
 	Error:							;default
-		LDI ZL,low(error_string*2)	;Load address of the error message
-		LDI ZH,high(error_string*2)
+		LDI ZL,low(error_string<<1)	;Load address of the error message
+		LDI ZH,high(error_string<<1)
 		RCALL Send_byte				;Print error message
 		RJMP Main					;Try again
 		
@@ -189,10 +193,10 @@ Get_state:
 Lock:	
 	CLR r18					;Clear R18
 	OUT PORTB, r18			;Pull all pins LOW
-	LDI r18,0x01			;Pull pin 8 on the arduino HIGH
+	LDI r18, (1<<0)			;Pull pin 8 on the arduino HIGH
 	OUT PORTB,r18
-	LDI ZL,low(lock_it*2)	;Load the lock message address
-	LDI ZH,high(lock_it*2)
+	LDI ZL,low(lock_it<<1)	;Load the lock message address
+	LDI ZH,high(lock_it<<1)
 	RCALL Send_byte			;Print lock message
 	RJMP Main				;Print Menu
 
@@ -204,16 +208,16 @@ Lock:
 **/
 Ulock:
 	CLR state				;Clear state register
-	LDI ZL,low(enter_pass*2)	;Load the enter pass message address
-	LDI ZH,high(enter_pass*2)
+	LDI ZL,low(enter_pass<<1)	;Load the enter pass message address
+	LDI ZH,high(enter_pass<<1)
 	RCALL Send_byte				;Print the enter pass message
 	RJMP Get_bytes				;Get pass from user and check if the pass entered is correct
 	Ulock_it:
-		LDI ZL,low(unlock_it*2)	;Load unlock message address
-		LDI ZH,high(unlock_it*2)
+		LDI ZL,low(unlock_it<<1)	;Load unlock message address
+		LDI ZH,high(unlock_it<<1)
 		RCALL Send_byte			;Print the unlock message
 		OUT PORTB, state		;Pull all pins LOW
-		LDI r18, 0x02			;Pull pin 9 HIGH
+		LDI r18, (1<<1)			;Pull pin 9 HIGH
 		OUT PORTB,r18			
 	RJMP Main
 
@@ -224,12 +228,12 @@ Ulock:
 * @return				void
 **/
 RESET:
-	LDI state,0xFF				;Set state register
-	LDI ZL,low(enter_pass*2)	;Load enter pass message address
-	LDI ZH,high(enter_pass*2)
+	LDI state,0xFF				;Set state register to indicate reset mode
+	LDI ZL,low(enter_pass<<1)	;Load enter pass message address
+	LDI ZH,high(enter_pass<<1)
 	RCALL Send_byte				;Print enter pass message
 
-	RJMP Get_bytes			;Check if entered pass is correct
+	RJMP Get_bytes				;Check if entered pass is correct
 	Reset_it:
 		LDI r18,(1<<2)
 		OUT PORTB,r18
@@ -262,12 +266,12 @@ Get_bytes:
 * @return				void
 **/
 Check_pass:
-	LDI ZH, high(pass<<1)	;Load the address of the pass ------ NEED TO CHANGE TO ADDRESS IN SRAM
+	LDI ZH, high(pass<<1)		;Load the address of the pass in SRAM
 	LDI ZL, low(pass<<1)
 	COMP:
-		LD r23,Z+				;Check if each byte is equal to the entered byte
-		CP r23,r19
-			BRNE Error
+		LD r23,Z+				;Load a byte from SRAM as poited to by Z (post incremented)
+		CP r23,r19				;Compare the first bytes of the password with the user input
+			BRNE Error			;Throw an error if they are not equal
 		LD r23,Z+
 		CP r23,r20
 			BRNE Error
@@ -278,9 +282,9 @@ Check_pass:
 		CP r23,r22
 			BRNE Error
 
-		SBRS state,1		;If bit in register is clear
-			RJMP Ulock_it	;the unlock subroutine called it
-		RJMP Reset_it		;Else, the reset subroutine called it
+		SBRS state,1			;If bit in register is clear
+			RJMP Ulock_it		;the unlock subroutine called it
+		RJMP Reset_it			;Else, the reset subroutine called it
 
 /**
 * @details				Gets the new pass and stores each byte into a register
@@ -291,16 +295,16 @@ Get_new_pass:
 	LDI ZL, low(new_pass<<1)
 	RCALL Send_byte
 
-	RCALL Uart_Rx	;Process each key input
-	MOV r19,out_buf	;Store keyinputs
+	RCALL Uart_Rx			;Process each key input
+	MOV r19,out_buf			;Store key inputs is seperate registers
 	RCALL uart_Rx
 	MOV r20,out_buf
 	RCALL Uart_Rx
 	MOV r21,out_buf
 	RCALL Uart_Rx
 	MOV r22,out_buf
-
-	RCALL Store_pass ;Store pass is SRAM
+		
+	RCALL Store_pass			;Store pass is SRAM
 	RET
 
 /**
@@ -309,10 +313,10 @@ Get_new_pass:
 * @return				void
 **/
 Store_pass:
-	LDI YH,high(pass<<1)
+	LDI YH,high(pass<<1)		;Load address 
 	LDI YL,low(pass<<1)
 
-	ST Y+,r19
+	ST Y+,r19					;Store each byte in SRAM at the address poited to by Y (post increment)
 	ST Y+,r20
 	ST Y+,r21
 	ST Y,r22

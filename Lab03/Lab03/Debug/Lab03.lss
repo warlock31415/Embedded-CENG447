@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm Mon Mar 11 21:48:49 2019
+AVRASM ver. 2.2.7  C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm Mon Mar 11 22:03:13 2019
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
@@ -988,7 +988,7 @@ AVRASM ver. 2.2.7  C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.
                                  ; Lab03.asm
                                  ;
                                  ; Created: 3/4/2019 8:49:32 PM
-                                 ; Author : 7410983
+                                 ; Author : Pratik Sinai Kunkolienker
                                  ;
                                  
                                  
@@ -1218,16 +1218,20 @@ AVRASM ver. 2.2.7  C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.
 0000c3 917f                      	POP r23
 0000c4 916f                      	POP r22
                                  
+                                 /**
+                                 * @details				Retrieve default password from flash and store it in SRAM
+                                 * @return				void	
+                                 **/
                                  Store_def_pass:
-0000c5 e0f1                      	LDI ZH,high(def_pass<<1)
-0000c6 e4ec                      	LDI ZL,low(def_pass<<1)
+0000c5 e0f1                      	LDI ZH,high(def_pass<<1)		;Load high byte of the def_pass address
+0000c6 e4ec                      	LDI ZL,low(def_pass<<1)			;Load low byte of the def_pass address
+                                 		
+0000c7 e0d2                      	LDI YH,high(pass<<1)			;Load high byte of the pass address in SRAM
+0000c8 e0c0                      	LDI YL,low(pass<<1)				;Load low byte of the pass address in SRAM
                                  
-0000c7 e0d2                      	LDI YH,high(pass<<1)
-0000c8 e0c0                      	LDI YL,low(pass<<1)
-                                 
-0000c9 9135                      	LPM r19,Z+
-0000ca 9339                      	ST Y+,r19
-0000cb 9135                      	LPM r19,Z+
+0000c9 9135                      	LPM r19,Z+						;Load from flash
+0000ca 9339                      	ST Y+,r19						;Store to SRAM
+0000cb 9135                      	LPM r19,Z+						;Repeat for all 4 bytes
 0000cc 9339                      	ST Y+,r19
 0000cd 9135                      	LPM r19,Z+
 0000ce 9339                      	ST Y+,r19
@@ -1288,11 +1292,11 @@ AVRASM ver. 2.2.7  C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.
                                  * @return					void
                                  **/
                                  Print_menu:
-0000e7 e0e0                      	LDI ZL,low(menu1*2)		;Load the menu address
-0000e8 e0f0                      	LDI ZH,high(menu1*2)
-                                 	Send_byte:				;Load data till it hits a null character
-0000e9 9105                      		LPM out_buf,Z+		;and send it over UART
-0000ea 3000                      		CPI out_buf,0x00
+0000e7 e0e0                      	LDI ZL,low(menu1<<1)		;Load the menu address (Needs to be left shifted by 1 to get to the 
+0000e8 e0f0                      	LDI ZH,high(menu1<<1)		;correct address)
+                                 	Send_byte:				
+0000e9 9105                      		LPM out_buf,Z+			;Load data till it hits a null character
+0000ea 3000                      		CPI out_buf,0x00		;and send it over UART
 0000eb f011                      			BREQ exit
 0000ec dfe9                      		RCALL Uart_Tx
 0000ed cffb                      		RJMP Send_byte
@@ -1318,8 +1322,8 @@ AVRASM ver. 2.2.7  C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.
 0000f4 f0c1                      		BREQ RESET			;go to the Reset subroutine
                                  
                                  	Error:							;default
-0000f5 eeec                      		LDI ZL,low(error_string*2)	;Load address of the error message
-0000f6 e0f0                      		LDI ZH,high(error_string*2)
+0000f5 eeec                      		LDI ZL,low(error_string<<1)	;Load address of the error message
+0000f6 e0f0                      		LDI ZH,high(error_string<<1)
 0000f7 dff1                      		RCALL Send_byte				;Print error message
 0000f8 cfd9                      		RJMP Main					;Try again
                                  		
@@ -1330,10 +1334,10 @@ AVRASM ver. 2.2.7  C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.
                                  Lock:	
 0000f9 2722                      	CLR r18					;Clear R18
 0000fa b925                      	OUT PORTB, r18			;Pull all pins LOW
-0000fb e021                      	LDI r18,0x01			;Pull pin 8 on the arduino HIGH
+0000fb e021                      	LDI r18, (1<<0)			;Pull pin 8 on the arduino HIGH
 0000fc b925                      	OUT PORTB,r18
-0000fd e3e2                      	LDI ZL,low(lock_it*2)	;Load the lock message address
-0000fe e0f1                      	LDI ZH,high(lock_it*2)
+0000fd e3e2                      	LDI ZL,low(lock_it<<1)	;Load the lock message address
+0000fe e0f1                      	LDI ZH,high(lock_it<<1)
 0000ff dfe9                      	RCALL Send_byte			;Print lock message
 000100 cfd1                      	RJMP Main				;Print Menu
                                  
@@ -1345,16 +1349,16 @@ AVRASM ver. 2.2.7  C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.
                                  **/
                                  Ulock:
 000101 2788                      	CLR state				;Clear state register
-000102 e0ea                      	LDI ZL,low(enter_pass*2)	;Load the enter pass message address
-000103 e0f1                      	LDI ZH,high(enter_pass*2)
+000102 e0ea                      	LDI ZL,low(enter_pass<<1)	;Load the enter pass message address
+000103 e0f1                      	LDI ZH,high(enter_pass<<1)
 000104 dfe4                      	RCALL Send_byte				;Print the enter pass message
-000105 c015                      	RJMP Get_bytes				;Get pass from user and check if the pass entered is correct
+000105 c013                      	RJMP Get_bytes				;Get pass from user and check if the pass entered is correct
                                  	Ulock_it:
-000106 e3ee                      		LDI ZL,low(unlock_it*2)	;Load unlock message address
-000107 e0f1                      		LDI ZH,high(unlock_it*2)
+000106 e3ee                      		LDI ZL,low(unlock_it<<1)	;Load unlock message address
+000107 e0f1                      		LDI ZH,high(unlock_it<<1)
 000108 dfe0                      		RCALL Send_byte			;Print the unlock message
 000109 b985                      		OUT PORTB, state		;Pull all pins LOW
-00010a e022                      		LDI r18, 0x02			;Pull pin 9 HIGH
+00010a e022                      		LDI r18, (1<<1)			;Pull pin 9 HIGH
 00010b b925                      		OUT PORTB,r18			
 00010c cfc5                      	RJMP Main
                                  
@@ -1365,39 +1369,37 @@ AVRASM ver. 2.2.7  C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.
                                  * @return				void
                                  **/
                                  RESET:
-00010d ef8f                      	LDI state,0xFF				;Set state register
-00010e e0ea                      	LDI ZL,low(enter_pass*2)	;Load enter pass message address
-00010f e0f1                      	LDI ZH,high(enter_pass*2)
+00010d ef8f                      	LDI state,0xFF				;Set state register to indicate reset mode
+00010e e0ea                      	LDI ZL,low(enter_pass<<1)	;Load enter pass message address
+00010f e0f1                      	LDI ZH,high(enter_pass<<1)
 000110 dfd8                      	RCALL Send_byte				;Print enter pass message
                                  
-000111 c009                      	RJMP Get_bytes			;Check if entered pass is correct
+000111 c007                      	RJMP Get_bytes				;Check if entered pass is correct
                                  	Reset_it:
 000112 e024                      		LDI r18,(1<<2)
 000113 b925                      		OUT PORTB,r18
-000114 d021                      		RCALL Get_new_pass		;Get the new pass
-000115 e007                      		LDI out_buf,0x07		;Make the bell sound ---- MIGHT NEED TO CHANGE
-000116 dfbf                      		RCALL Uart_Tx
-000117 2722                      		CLR r18
-000118 b925                      		OUT PORTB,r18
-000119 cfdf                      	RJMP Lock
-00011a cfb7                      	RJMP Main
+000114 d01f                      		RCALL Get_new_pass		;Get the new pass
+000115 2722                      		CLR r18
+000116 b925                      		OUT PORTB,r18
+000117 cfe1                      	RJMP Lock
+000118 cfb9                      	RJMP Main
                                  
                                  /**
                                  * @details				Waits for each individual byte moves them into storage registers	
                                  * @return				void
                                  **/
                                  Get_bytes:
-00011b dfc2                      	RCALL Uart_Rx				;Wait for first byte of pass
-00011c 2f30                      	MOV r19,out_buf				;Store first byte
-00011d dfc0                      	RCALL uart_Rx				;Wait for byte 2
-00011e 2f40                      	MOV r20,out_buf				;Store byte 2
-00011f dfbe                      	RCALL Uart_Rx				;Wait for byte 3
-000120 2f50                      	MOV r21,out_buf				;Store byte 3
-000121 dfbc                      	RCALL Uart_Rx				;Wait for byte 4
-000122 2f60                      	MOV r22,out_buf				;Store byte 4
+000119 dfc4                      	RCALL Uart_Rx				;Wait for first byte of pass
+00011a 2f30                      	MOV r19,out_buf				;Store first byte
+00011b dfc2                      	RCALL uart_Rx				;Wait for byte 2
+00011c 2f40                      	MOV r20,out_buf				;Store byte 2
+00011d dfc0                      	RCALL Uart_Rx				;Wait for byte 3
+00011e 2f50                      	MOV r21,out_buf				;Store byte 3
+00011f dfbe                      	RCALL Uart_Rx				;Wait for byte 4
+000120 2f60                      	MOV r22,out_buf				;Store byte 4
                                  
-000123 c001                      	RJMP Check_pass				;Check if the pass is correct
-000124 cfad                      	RJMP Main
+000121 c001                      	RJMP Check_pass				;Check if the pass is correct
+000122 cfaf                      	RJMP Main
                                  
                                  /**
                                  * @details				Checks if the entered pass matches the stored pass
@@ -1405,46 +1407,46 @@ AVRASM ver. 2.2.7  C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.
                                  * @return				void
                                  **/
                                  Check_pass:
-000125 e0f2                      	LDI ZH, high(pass<<1)	;Load the address of the pass ------ NEED TO CHANGE TO ADDRESS IN SRAM
-000126 e0e0                      	LDI ZL, low(pass<<1)
+000123 e0f2                      	LDI ZH, high(pass<<1)		;Load the address of the pass in SRAM
+000124 e0e0                      	LDI ZL, low(pass<<1)
                                  	COMP:
-000127 9171                      		LD r23,Z+				;Check if each byte is equal to the entered byte
-000128 1773                      		CP r23,r19
-000129 f659                      			BRNE Error
-00012a 9171                      		LD r23,Z+
-00012b 1774                      		CP r23,r20
-00012c f641                      			BRNE Error
-00012d 9171                      		LD r23,Z+
-00012e 1775                      		CP r23,r21
-00012f f629                      			BRNE Error
-000130 8170                      		LD r23,Z
-000131 1776                      		CP r23,r22
-000132 f611                      			BRNE Error
+000125 9171                      		LD r23,Z+				;Load a byte from SRAM as poited to by Z (post incremented)
+000126 1773                      		CP r23,r19				;Compare the first bytes of the password with the user input
+000127 f669                      			BRNE Error			;Throw an error if they are not equal
+000128 9171                      		LD r23,Z+
+000129 1774                      		CP r23,r20
+00012a f651                      			BRNE Error
+00012b 9171                      		LD r23,Z+
+00012c 1775                      		CP r23,r21
+00012d f639                      			BRNE Error
+00012e 8170                      		LD r23,Z
+00012f 1776                      		CP r23,r22
+000130 f621                      			BRNE Error
                                  
-000133 ff81                      		SBRS state,1		;If bit in register is clear
-000134 cfd1                      			RJMP Ulock_it	;the unlock subroutine called it
-000135 cfdc                      		RJMP Reset_it		;Else, the reset subroutine called it
+000131 ff81                      		SBRS state,1			;If bit in register is clear
+000132 cfd3                      			RJMP Ulock_it		;the unlock subroutine called it
+000133 cfde                      		RJMP Reset_it			;Else, the reset subroutine called it
                                  
                                  /**
                                  * @details				Gets the new pass and stores each byte into a register
                                  * @return				void
                                  **/
                                  Get_new_pass:
-000136 e0f1                      	LDI ZH, high(new_pass<<1) ;Ask user to enter new pass
-000137 e1ec                      	LDI ZL, low(new_pass<<1)
-000138 dfb0                      	RCALL Send_byte
+000134 e0f1                      	LDI ZH, high(new_pass<<1) ;Ask user to enter new pass
+000135 e1ec                      	LDI ZL, low(new_pass<<1)
+000136 dfb2                      	RCALL Send_byte
                                  
-000139 dfa4                      	RCALL Uart_Rx	;Process each key input
-00013a 2f30                      	MOV r19,out_buf	;Store keyinputs
-00013b dfa2                      	RCALL uart_Rx
-00013c 2f40                      	MOV r20,out_buf
+000137 dfa6                      	RCALL Uart_Rx			;Process each key input
+000138 2f30                      	MOV r19,out_buf			;Store key inputs is seperate registers
+000139 dfa4                      	RCALL uart_Rx
+00013a 2f40                      	MOV r20,out_buf
+00013b dfa2                      	RCALL Uart_Rx
+00013c 2f50                      	MOV r21,out_buf
 00013d dfa0                      	RCALL Uart_Rx
-00013e 2f50                      	MOV r21,out_buf
-00013f df9e                      	RCALL Uart_Rx
-000140 2f60                      	MOV r22,out_buf
-                                 
-000141 d001                      	RCALL Store_pass ;Store pass is SRAM
-000142 9508                      	RET
+00013e 2f60                      	MOV r22,out_buf
+                                 		
+00013f d001                      	RCALL Store_pass			;Store pass is SRAM
+000140 9508                      	RET
                                  
                                  /**
                                  * @details				Store new pass in SRAM
@@ -1452,15 +1454,15 @@ AVRASM ver. 2.2.7  C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.
                                  * @return				void
                                  **/
                                  Store_pass:
-000143 e0d2                      	LDI YH,high(pass<<1)
-000144 e0c0                      	LDI YL,low(pass<<1)
+000141 e0d2                      	LDI YH,high(pass<<1)		;Load address 
+000142 e0c0                      	LDI YL,low(pass<<1)
                                  
-000145 9339                      	ST Y+,r19
-000146 9349                      	ST Y+,r20
-000147 9359                      	ST Y+,r21
-000148 8368                      	ST Y,r22
+000143 9339                      	ST Y+,r19					;Store each byte in SRAM at the address poited to by Y (post increment)
+000144 9349                      	ST Y+,r20
+000145 9359                      	ST Y+,r21
+000146 8368                      	ST Y,r22
                                  
-000149 9508                      	RET
+000147 9508                      	RET
 
 
 RESOURCE USE INFORMATION
@@ -1480,7 +1482,7 @@ counted separately from r26..r31 here.
 "ATmega328P" register use summary:
 x  :   0 y  :   8 z  :   9 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  16 r17:   6 r18:  12 r19:  12 r20:   4 
+r13:   0 r14:   0 r15:   0 r16:  15 r17:   6 r18:  12 r19:  12 r20:   4 
 r21:   4 r22:  14 r23:  18 r24:   4 r25:   0 r26:   0 r27:   0 r28:   2 
 r29:   2 r30:   9 r31:   9 
 Registers used: 15 out of 35 (42.9%)
@@ -1496,10 +1498,10 @@ clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   5 cls   :   0
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   4 cpc   :   0 
 cpi   :   4 cpse  :   0 dec   :   0 eor   :   0 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   0 jmp   :   0 
-ld    :   4 ldd   :   0 ldi   :  33 lds   :   5 lpm   :   6 lsl   :   0 
+ld    :   4 ldd   :   0 ldi   :  32 lds   :   5 lpm   :   6 lsl   :   0 
 lsr   :   0 mov   :   8 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
 neg   :   0 nop   :   0 or    :   0 ori   :   1 out   :   8 pop   :   3 
-push  :   3 rcall :  21 ret   :   5 reti  :   0 rjmp  :  17 rol   :   0 
+push  :   3 rcall :  20 ret   :   5 reti  :   0 rjmp  :  17 rol   :   0 
 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   0 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   3 sec   :   0 seh   :   0 
 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
@@ -1510,7 +1512,7 @@ Instructions used: 20 out of 113 (17.7%)
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000294    324    336    660   32768   2.0%
+[.cseg] 0x000000 0x000290    320    336    656   32768   2.0%
 [.dseg] 0x000100 0x000104      0      4      4    2048   0.2%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 

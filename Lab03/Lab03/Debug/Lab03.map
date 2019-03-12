@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm Mon Mar 11 21:48:49 2019
+AVRASM ver. 2.2.7  C:\Users\7410983\Documents\Atmel Studio\7.0\Lab03\Lab03\main.asm Mon Mar 11 22:03:13 2019
 
 
 EQU  SIGNATURE_000 0000001e
@@ -732,10 +732,10 @@ CSEG Ulock        00000101
 CSEG R            000000f3
 CSEG RESET        0000010d
 CSEG Error        000000f5
-CSEG Get_bytes    0000011b
+CSEG Get_bytes    00000119
 CSEG Ulock_it     00000106
 CSEG Reset_it     00000112
-CSEG Get_new_pass 00000136
-CSEG Check_pass   00000125
-CSEG COMP         00000127
-CSEG Store_pass   00000143
+CSEG Get_new_pass 00000134
+CSEG Check_pass   00000123
+CSEG COMP         00000125
+CSEG Store_pass   00000141
