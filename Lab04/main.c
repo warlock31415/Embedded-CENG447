@@ -47,6 +47,7 @@ void get_read_write(char *);
 void read(char *);
 void error();
 void write();
+int atoi(char *);
 
 /**
 * @details  This is the main function. It initializes the menu
@@ -165,14 +166,14 @@ void get_read_write(char *str){
 * @returns  		void
 **/
 void read(char *str){
-	outputstring("In read\r\n");
-	if(strstr(str," 9")){
-			if(PINB & 1<<PINB1)
+	//outputstring("In read\r\n");
+	if(atoi(str) == 9){//if(strstr(str," 9")){
+		if(PINB & 1<<PINB1)
 				outputstring("Pin 9 reads HIGH\r\n");
 			else
 				outputstring("Pin 9 reads LOW\r\n");
 		}
-	else if(strstr(str," 11")){
+	else if(atoi(str) == 11){//strstr(str," 11")){
 			if(PINB & 1<<PINB3)
 				outputstring("Pin 11 reads HIGH\r\n");
 			else
@@ -192,7 +193,7 @@ void read(char *str){
 void write(char *str){
 	outputstring("In write\r\n");
 
-	if (strstr(str," 8 ")){
+	if (atoi(str)==8){//strstr(str," 8 ")){
 		if (strstr(str,"HIGH")){
 			outputstring("Pin 8 is set HIGH\r\n");
 			PORTB |= (1<<PINB0);
@@ -204,7 +205,7 @@ void write(char *str){
 		else
 			error();
 	}
-	else if(strstr(str," 10 ")){
+	else if(atoi(str)==10){//strstr(str," 10 ")){
 		if (strstr(str,"HIGH")){
 			outputstring("Pin 10 is set HIGH\r\n");
 			PORTB |= (1<<PINB2);
@@ -227,4 +228,26 @@ void write(char *str){
 void error()
 {
 	outputstring("INVALID STATE. Command structure: READ/(WRITE) PIN_NUM (HIGH/LOW)\r\n");
+}
+
+
+/**
+* @details		Converts ASCII to integer. Will not work if two numbers are seperrated by a space
+* @param [in] str The input command string
+* @returns int 
+*
+**/
+int atoi(char *str)
+{
+	int i = 0;
+	int num = 0;
+	while(str[i] != 0){
+		if(str[i] >= '0' && str[i] <= '9'){
+			num = num*10+(str[i]-'0');
+		}
+		else
+			return num;
+		i++;
+	}
+	return num;
 }
