@@ -3,6 +3,8 @@ TARGET=main
 # Change port
 PORT = /dev/ttyACM0
 
+LAB = lab4
+
 
 CC = avr-gcc
 CFLAGS = -g -Wall -Os
@@ -18,19 +20,20 @@ OBJCOPY = avr-objcopy
 all:$(TARGET).hex
 
 # This is  the first dependancy, thus the base file name needs to be passed in (?)
-$(TARGET).o: $(TARGET).c
-	@ $(CC) $(CFLAGS) -mmcu=$(DEVICE) -DF_CPU=$(FREQ) -c $(TARGET).c
+$(TARGET).o: $(TARGET).c $(LAB).c
+	@ $(CC) $(CFLAGS) -mmcu=$(DEVICE) -DF_CPU=$(FREQ) -c $(TARGET).c $(LAB).c
 
 # The '%'' sign makes the Make file more generic, can be replaced by $(TARGET)
 # $< is the dependancy and $@ is the target file
-%.elf: %.o
-	@ $(CC) $(CFLAGS) -mmcu=$(DEVICE) -DF_CPU=$(FREQ) $< -o $@
+%.elf: %.o $(LAB).o
+	@ $(CC) $(CFLAGS) -mmcu=$(DEVICE) -DF_CPU=$(FREQ) $< $(LAB).o -o $@
 	@ echo "Why are they called elf files???"
 
 # Since the the rules are chained together Make deletes intermediate files
 # automatically. Use ".PRECIOUS: %.elf" to let Make know to keep the intermediate
 # files
 .PRECIOUS: %.elf
+
 # Removing the above line will execute a rm *.elf command automatically and thus
 # make clean would throw up an error
 

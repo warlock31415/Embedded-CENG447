@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['init',['init',['../main_8c.html#a02fd73d861ef2e4aabb38c0c9ff82947',1,'main.c']]]
+  ['get_5fread_5fwrite',['get_read_write',['../lab4_8h.html#a27542c4d2aec3b19f246211c18fd77e4',1,'lab4.c']]]
 ];

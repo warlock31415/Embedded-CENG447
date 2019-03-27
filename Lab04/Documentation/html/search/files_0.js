@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['main_2ec',['main.c',['../main_8c.html',1,'']]]
+  ['lab4_2eh',['lab4.h',['../lab4_8h.html',1,'']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['error',['error',['../main_8c.html#a7e15c8e2885871839fc2b820dfbdb4ce',1,'main.c']]]
+  ['atoi',['atoi',['../lab4_8h.html#aca36d3264542b64edb7ca6cb43675bf0',1,'lab4.c']]]
 ];
