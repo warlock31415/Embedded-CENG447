@@ -2,7 +2,8 @@
  * @file    lab4.h
  * @author  Pratik Kunkolienker
  * @date    21 Jan 2019
- * @brief   TProgram demonstrates using UART to control the input and output ports of the Arduino.
+ * @brief   The Program demonstrates using UART to control the input and output 
+ *			ports of the Arduino.
  *
  * @details This program was made to run on the ATMEGA328p running at 16MHz. 
  */

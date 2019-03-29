@@ -106,8 +106,6 @@ void read(char *str){
 * @returns          void
 **/
 void write(char *str){
-	outputstring("In write\r\n");
-
 	if (atoi(str)==8){//strstr(str," 8 ")){
 		if (strstr(str,"HIGH")){
 			outputstring("Pin 8 is set HIGH\r\n");
@@ -144,12 +142,14 @@ void write(char *str){
 
 void error()
 {
-	outputstring("INVALID STATE. Command structure: READ/(WRITE) PIN_NUM (HIGH/LOW)\r\n");
+	outputstring("INVALID STATE. Command structure: READ/(WRITE) PIN_NUM \
+		(HIGH/LOW)\r\n");
 }
 
 
 /**
-* @details		Converts ASCII to integer. Will not work if two numbers are seperrated by a space
+* @details		Converts ASCII to integer. Will not work if two numbers are 
+*				seperrated by a space
 * @param [in] str The input command string
 * @returns int 
 *
