@@ -58,6 +58,7 @@ char receivebyte(){
 	return UDR0;
 }
 
+
 static void wait_for_transmit(){
 	while((UCSR0A & (1<<UDRE0))==0){}
 

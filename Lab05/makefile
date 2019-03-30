@@ -18,13 +18,13 @@ OBJCOPY = avr-objcopy
 all:$(TARGET).hex
 
 # This is  the first dependancy, thus the base file name needs to be passed in (?)
-$(TARGET).o: $(TARGET).c uart.c
-	@ $(CC) $(CFLAGS) -mmcu=$(DEVICE) -DF_CPU=$(FREQ) -c $(TARGET).c uart.c
+$(TARGET).o: $(TARGET).c uart.c LM298.c
+	@ $(CC) $(CFLAGS) -mmcu=$(DEVICE) -DF_CPU=$(FREQ) -c $(TARGET).c uart.c LM298.c
 
 # The '%'' sign makes the Make file more generic, can be replaced by $(TARGET)
 # $< is the dependancy and $@ is the target file
 %.elf: %.o
-	@ $(CC) $(CFLAGS) -mmcu=$(DEVICE) -DF_CPU=$(FREQ) $< uart.o -o $@
+	@ $(CC) $(CFLAGS) -mmcu=$(DEVICE) -DF_CPU=$(FREQ) $< uart.o LM298.o -o $@
 
 # Since the the rules are chained together Make deletes intermediate files
 # automatically. Use ".PRECIOUS: %.elf" to let Make know to keep the intermediate
