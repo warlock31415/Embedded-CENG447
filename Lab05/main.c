@@ -8,6 +8,7 @@
 
 int main(){
 	UART_init();
+	driver_init();
 
 
 	while(1){

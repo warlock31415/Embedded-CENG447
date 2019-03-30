@@ -2,10 +2,10 @@
 TARGET=main
 # Change port
 PORT = /dev/ttyACM1
-
+DEPENDENCIES = uart.c LM298.c
 
 CC = avr-gcc
-CFLAGS = -g -Wall -Os
+CFLAGS = -g -Wall -Os -I./
 # Chage this if using a different chip also change frequency if required
 DEVICE = atmega328p
 FREQ = 16000000UL
@@ -19,21 +19,17 @@ all:$(TARGET).hex
 
 # This is  the first dependancy, thus the base file name needs to be passed in (?)
 $(TARGET).o: $(TARGET).c uart.c LM298.c
-	@ $(CC) $(CFLAGS) -mmcu=$(DEVICE) -DF_CPU=$(FREQ) -c $(TARGET).c uart.c LM298.c
+	$(CC) $(CFLAGS) -mmcu=$(DEVICE) -DF_CPU=$(FREQ) $(TARGET).c $(DEPENDENCIES) -o $(TARGET).o
 
 # The '%'' sign makes the Make file more generic, can be replaced by $(TARGET)
 # $< is the dependancy and $@ is the target file
-%.elf: %.o
-	@ $(CC) $(CFLAGS) -mmcu=$(DEVICE) -DF_CPU=$(FREQ) $< uart.o LM298.o -o $@
+
 
 # Since the the rules are chained together Make deletes intermediate files
 # automatically. Use ".PRECIOUS: %.elf" to let Make know to keep the intermediate
 # files
-.PRECIOUS: %.elf
-# Removing the above line will execute a rm *.elf command automatically and thus
-# make clean would throw up an error
 
-%.hex: %.elf
+%.hex: %.o
 	@ $(OBJCOPY) -j .text -j .data -O ihex $< $@
 	@ echo "Success!!"
 
@@ -49,7 +45,6 @@ flash: $(TARGET).hex
 
 
 clean:
-	@ rm *.o *.elf
+	@ rm *.o *.hex
 
-clean_all: clean
-	@ rm *.hex
+
