@@ -3,7 +3,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-static char map(int duty_cyc);
+//static char map(int duty_cyc);
 
 /**
 * @details 0 - No clock source (timer stopped)
@@ -16,7 +16,7 @@ static char map(int duty_cyc);
 *		   7 - Ext clk on T0 pin. Clock on rising edge
 */
 
-void driver_init(char clk){
+void L298::init(char clk){
 	TCCR0A |= (1<<COM0A1); //Clear OC0A on compare match
 	TCCR0A |= (1<<COM0B1); //Clear oC0B on compare match
 
@@ -35,12 +35,12 @@ void driver_init(char clk){
 
 }
 
-static char map(int duty_cyc)
+ char L298::map(int duty_cyc)
 {
 	return duty_cyc*255/100;
 }
 
-void turn_right(int speed){
+void L298::turn_right(int speed){
 
 	PORTD |= (1<<H_IN1);
 	PORTB &= ~(1<<H_IN2); 
@@ -51,7 +51,7 @@ void turn_right(int speed){
 	OCR0B = OCR0A;
 }
 
-void forward(int speed){
+void L298::forward(int speed){
 	PORTD |= (1<<H_IN1);
 	PORTB &= ~(1<<H_IN2); 
 	PORTB |= (1<<H_IN4);
@@ -61,7 +61,7 @@ void forward(int speed){
 	OCR0B = OCR0A;
 }
 
-void  turn_left(int speed){
+void  L298::turn_left(int speed){
 	PORTD &= ~(1<<H_IN1);
 	PORTB |= (1<<H_IN2); 
 	PORTB |= (1<<H_IN4);
@@ -71,7 +71,7 @@ void  turn_left(int speed){
 	OCR0B = OCR0A;
 }
 
-void back(int speed){
+void L298::back(int speed){
 	PORTD &= ~(1<<H_IN1);
 	PORTB |= (1<<H_IN2); 
 	PORTB &= ~(1<<H_IN4);
@@ -81,7 +81,7 @@ void back(int speed){
 	OCR0B = OCR0A;
 }
 
-void square_turn(int speed){
+void L298::square_turn(int speed){
 	forward(speed);
 	_delay_ms(3000);
 	turn_right(speed);
@@ -96,17 +96,17 @@ void square_turn(int speed){
 	_delay_ms(1000);
 	forward(speed);
 	_delay_ms(3000);
-	driver_init(0);
+	init(0);
 
 }
 
-void circ()
+void L298::circ()
 {
 	PORTD |= (1<<H_IN1);
 	PORTB &= ~(1<<H_IN2); 
 	PORTB |= (1<<H_IN4);
 	PORTB &= ~(1<<H_IN3); 
 
-	OCR0A = map(100);
+	OCR0A = map(100); 
 	OCR0B = map(30);
 }

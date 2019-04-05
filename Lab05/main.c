@@ -17,10 +17,12 @@
 #define BAUDRATE 9600
 #define PRESCALER F_CPU/(BAUDRATE*16UL)-1
 
-int main(){
-	driver_init(5);
+L298 Motor;
 
-	circ();
+int main(){
+	Motor.init(5);
+
+	Motor.circ();
 
 	while(1){
 	}

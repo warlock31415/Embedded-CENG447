@@ -4,7 +4,7 @@ TARGET=main
 PORT = /dev/ttyACM0
 DEPENDENCIES = L298.c
 
-CC = avr-gcc
+CC = avr-g++
 CFLAGS = -g -Wall -Os -I./
 # Chage this if using a different chip also change frequency if required
 DEVICE = atmega328p
