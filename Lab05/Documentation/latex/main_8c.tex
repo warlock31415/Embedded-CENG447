@@ -1,0 +1,71 @@
+\hypertarget{main_8c}{}\section{main.\+c File Reference}
+\label{main_8c}\index{main.\+c@{main.\+c}}
+
+
+This is the main file for Lab 5. It declares the motor object and calls the appropriate functions to complete the required task.  
+
+
+{\ttfamily \#include $<$avr/io.\+h$>$}\newline
+{\ttfamily \#include $<$util/delay.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}L298.\+h\char`\"{}}\newline
+Include dependency graph for main.\+c\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=292pt]{main_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{main_8c_a734bbab06e1a9fd2e5522db0221ff6e3}{B\+A\+U\+D\+R\+A\+TE}~9600
+\item 
+\#define \hyperlink{main_8c_a0fac869d83ac1a584d6c45cf609f5fe7}{P\+R\+E\+S\+C\+A\+L\+ER}~F\+\_\+\+C\+PU/(\hyperlink{main_8c_a734bbab06e1a9fd2e5522db0221ff6e3}{B\+A\+U\+D\+R\+A\+TE}$\ast$16\+U\+L)-\/1
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{main_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}\label{main_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}} 
+int {\bfseries main} ()
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classL298}{L298} \hyperlink{main_8c_a6b41f9acb016dd748cdc43438c976163}{Motor}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This is the main file for Lab 5. It declares the motor object and calls the appropriate functions to complete the required task. 
+
+\begin{DoxyAuthor}{Author}
+Pratik Kunkolienker 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+27 March 2019
+\end{DoxyDate}
+This program was written has two versions. One compiled in C that uses functions. The other, compiled in C\+PP and uses classes. The main loop initializes the timer and calls the appropriate function such as circ and square turn. 
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{main_8c_a734bbab06e1a9fd2e5522db0221ff6e3}\label{main_8c_a734bbab06e1a9fd2e5522db0221ff6e3}} 
+\index{main.\+c@{main.\+c}!B\+A\+U\+D\+R\+A\+TE@{B\+A\+U\+D\+R\+A\+TE}}
+\index{B\+A\+U\+D\+R\+A\+TE@{B\+A\+U\+D\+R\+A\+TE}!main.\+c@{main.\+c}}
+\subsubsection{\texorpdfstring{B\+A\+U\+D\+R\+A\+TE}{BAUDRATE}}
+{\footnotesize\ttfamily \#define B\+A\+U\+D\+R\+A\+TE~9600}
+
+U\+A\+RT baudrate \mbox{\Hypertarget{main_8c_a0fac869d83ac1a584d6c45cf609f5fe7}\label{main_8c_a0fac869d83ac1a584d6c45cf609f5fe7}} 
+\index{main.\+c@{main.\+c}!P\+R\+E\+S\+C\+A\+L\+ER@{P\+R\+E\+S\+C\+A\+L\+ER}}
+\index{P\+R\+E\+S\+C\+A\+L\+ER@{P\+R\+E\+S\+C\+A\+L\+ER}!main.\+c@{main.\+c}}
+\subsubsection{\texorpdfstring{P\+R\+E\+S\+C\+A\+L\+ER}{PRESCALER}}
+{\footnotesize\ttfamily \#define P\+R\+E\+S\+C\+A\+L\+ER~F\+\_\+\+C\+PU/(\hyperlink{main_8c_a734bbab06e1a9fd2e5522db0221ff6e3}{B\+A\+U\+D\+R\+A\+TE}$\ast$16\+U\+L)-\/1}
+
+U\+A\+RT baudrate prescaler 
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{main_8c_a6b41f9acb016dd748cdc43438c976163}\label{main_8c_a6b41f9acb016dd748cdc43438c976163}} 
+\index{main.\+c@{main.\+c}!Motor@{Motor}}
+\index{Motor@{Motor}!main.\+c@{main.\+c}}
+\subsubsection{\texorpdfstring{Motor}{Motor}}
+{\footnotesize\ttfamily \hyperlink{classL298}{L298} Motor}
+
+Create a motor object that contains the initilization function and movement functions 

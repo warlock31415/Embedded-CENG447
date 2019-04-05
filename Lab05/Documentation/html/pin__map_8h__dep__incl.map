@@ -1,0 +1,5 @@
+<map id="pin_map.h" name="pin_map.h">
+<area shape="rect" id="node2" href="$L298_8h.html" title="This file contains functions declarations for using the L298 motor driver. " alt="" coords="73,80,135,107"/>
+<area shape="rect" id="node3" href="$L298_8c.html" title="This file contains functions for using the L298 motor driver. " alt="" coords="5,155,67,181"/>
+<area shape="rect" id="node4" href="$main_8c.html" title="This is the main file for Lab 5. It declares the motor object and calls the appropriate functions to ..." alt="" coords="91,155,152,181"/>
+</map>

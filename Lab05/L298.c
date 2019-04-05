@@ -1,24 +1,32 @@
+/**
+ * @file    L298.c
+ * @author  Pratik Kunkolienker
+ * @date    27 March 2019
+ * @brief   This file contains functions for using the L298 motor driver
+ *
+ */
+
+
+
+
 #include "L298.h"
 #include "pin_map.h"
 #include <avr/io.h>
 #include <util/delay.h>
 
-//static char map(int duty_cyc);
+
 
 /**
-* @details 0 - No clock source (timer stopped)
-*		   1 - No prescaler
-*		   2 - clk/8
-*		   3 - clk/64
-*		   4 - clk/256
-*		   5 - clk/1024
-*		   6 - Ext clk on T0 pin. Clock on falling edge
-*		   7 - Ext clk on T0 pin. Clock on rising edge
-*/
+* @details  This function initializes Timer0 by setting the compare match 
+*			registers A and B to clear on compare match. Setting the 
+*			Waveform generation mode bits 1 and 0 and the PWM clock frquency.
+*			This function also sets appropriate pins on PORTD as output.
+* @returns  void
+**/
 
 void L298::init(char clk){
 	TCCR0A |= (1<<COM0A1); //Clear OC0A on compare match
-	TCCR0A |= (1<<COM0B1); //Clear oC0B on compare match
+	TCCR0A |= (1<<COM0B1); //Clear OC0B on compare match
 
 	TCCR0A |= ((1<<WGM01)|(1<<WGM00)); // Fast PWM mode 3
 
@@ -35,11 +43,26 @@ void L298::init(char clk){
 
 }
 
+/**
+* @details  	This is a private function which is only available to functions 
+*				inside the class. It takes a percentage of speed as input 100 
+*				being max and 0 being the minimum and maps it from 0 to 255.
+* @param [in] 	duty_cyc Percentage of max speed
+* @returns  char duty_cyc*255/100
+**/
  char L298::map(int duty_cyc)
 {
 	return duty_cyc*255/100;
 }
 
+/**
+* @details  This function sets the direction of the motors such that the left
+*		side motors turn forwards and the right side mmotors turn the opposite
+*		direction. The function calls the \a map() such that a percentage is 
+*		mapped to a 0-255 range.
+*@param [in] speed A percentage of max speed 0-100%
+* @returns  void
+**/
 void L298::turn_right(int speed){
 
 	PORTD |= (1<<H_IN1);
@@ -51,6 +74,13 @@ void L298::turn_right(int speed){
 	OCR0B = OCR0A;
 }
 
+/**
+* @details  This function sets the direction of the motors such that the both
+*		run forwards. The function calls the \a map() such that a percentage is 
+*		mapped to a 0-255 range.
+*@param [in] speed A percentage of max speed 0-100%
+* @returns  void
+**/
 void L298::forward(int speed){
 	PORTD |= (1<<H_IN1);
 	PORTB &= ~(1<<H_IN2); 
@@ -61,6 +91,14 @@ void L298::forward(int speed){
 	OCR0B = OCR0A;
 }
 
+/**
+* @details  This function sets the direction of the motors such that the right
+*		side motors turn forwards and the left side mmotors turn the opposite
+*		direction. The function calls the \a map() such that a percentage is 
+*		mapped to a 0-255 range.
+*@param [in] speed A percentage of max speed 0-100%
+* @returns  void
+**/
 void  L298::turn_left(int speed){
 	PORTD &= ~(1<<H_IN1);
 	PORTB |= (1<<H_IN2); 
@@ -71,6 +109,13 @@ void  L298::turn_left(int speed){
 	OCR0B = OCR0A;
 }
 
+/**
+* @details  This function sets the direction of the motors such that the both
+*		run backwards. The function calls the \a map() such that a 
+*		percentage is mapped to a 0-255 range.
+*@param [in] speed A percentage of max speed 0-100%
+* @returns  void
+**/
 void L298::back(int speed){
 	PORTD &= ~(1<<H_IN1);
 	PORTB |= (1<<H_IN2); 
@@ -81,6 +126,13 @@ void L298::back(int speed){
 	OCR0B = OCR0A;
 }
 
+/**
+* @details  Calls the \a turn_right() function 4 times such that the robot 
+*			traces a square whose side length is as long as 3s in equivalent
+*			distance. The spedd is set to 0 at the end.
+*@param [in] speed A percentage of max speed 0-100%
+* @returns  void
+**/
 void L298::square_turn(int speed){
 	forward(speed);
 	_delay_ms(3000);
@@ -100,6 +152,12 @@ void L298::square_turn(int speed){
 
 }
 
+/**
+* @details  Sets the right side speed a little faster than the left speed
+* 			so that the robot traces a circle. The radius of the circle is 
+*			a relationship of the difference between the wheel speeds.
+* @returns  void
+**/
 void L298::circ()
 {
 	PORTD |= (1<<H_IN1);
