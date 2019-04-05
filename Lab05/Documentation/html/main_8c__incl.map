@@ -1,5 +1,4 @@
 <map id="main.c" name="main.c">
-<area shape="rect" id="node4" href="$uart_8h_source.html" title="uart.h" alt="" coords="31,80,85,107"/>
-<area shape="rect" id="node5" href="$LM298_8h_source.html" title="LM298.h" alt="" coords="110,80,182,107"/>
-<area shape="rect" id="node6" href="$pin__map_8h_source.html" title="pin_map.h" alt="" coords="95,155,178,181"/>
+<area shape="rect" id="node4" href="$L298_8h.html" title="This file contains functions declarations for using the L298 motor driver. " alt="" coords="106,80,167,107"/>
+<area shape="rect" id="node5" href="$pin__map_8h.html" title="This file contains functions declarations for using the L298 motor driver. " alt="" coords="95,155,178,181"/>
 </map>

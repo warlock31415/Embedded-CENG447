@@ -82,50 +82,117 @@ $(document).ready(function(){initNavTree('main_8c.html','');});
 <div class="header">
   <div class="summary">
 <a href="#define-members">Macros</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">main.c File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Program demonstrates using UART to control the input and output ports of the Arduino.  
+<p>This is the main file for Lab 5. It declares the motor object and calls the appropriate functions to complete the required task.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;avr/io.h&gt;</code><br />
 <code>#include &lt;util/delay.h&gt;</code><br />
-<code>#include &quot;uart.h&quot;</code><br />
-<code>#include &quot;LM298.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="L298_8h_source.html">L298.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for main.c:</div>
 <div class="dyncontent">
 <div class="center"><img src="main_8c__incl.png" border="0" usemap="#main_8c" alt=""/></div>
 <map name="main_8c" id="main_8c">
-<area shape="rect" id="node4" href="uart_8h_source.html" title="uart.h" alt="" coords="31,80,85,107"/>
-<area shape="rect" id="node5" href="LM298_8h_source.html" title="LM298.h" alt="" coords="110,80,182,107"/>
-<area shape="rect" id="node6" href="pin__map_8h_source.html" title="pin_map.h" alt="" coords="95,155,178,181"/>
+<area shape="rect" id="node4" href="L298_8h.html" title="This file contains functions declarations for using the L298 motor driver. " alt="" coords="106,80,167,107"/>
+<area shape="rect" id="node5" href="pin__map_8h.html" title="This file contains functions declarations for using the L298 motor driver. " alt="" coords="95,155,178,181"/>
 </map>
 </div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a734bbab06e1a9fd2e5522db0221ff6e3"><td class="memItemLeft" align="right" valign="top"><a id="a734bbab06e1a9fd2e5522db0221ff6e3"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>BAUDRATE</b>&#160;&#160;&#160;9600</td></tr>
+<tr class="memitem:a734bbab06e1a9fd2e5522db0221ff6e3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a734bbab06e1a9fd2e5522db0221ff6e3">BAUDRATE</a>&#160;&#160;&#160;9600</td></tr>
 <tr class="separator:a734bbab06e1a9fd2e5522db0221ff6e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0fac869d83ac1a584d6c45cf609f5fe7"><td class="memItemLeft" align="right" valign="top"><a id="a0fac869d83ac1a584d6c45cf609f5fe7"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>PRESCALER</b>&#160;&#160;&#160;F_CPU/(BAUDRATE*16UL)-1</td></tr>
+<tr class="memitem:a0fac869d83ac1a584d6c45cf609f5fe7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a0fac869d83ac1a584d6c45cf609f5fe7">PRESCALER</a>&#160;&#160;&#160;F_CPU/(<a class="el" href="main_8c.html#a734bbab06e1a9fd2e5522db0221ff6e3">BAUDRATE</a>*16UL)-1</td></tr>
 <tr class="separator:a0fac869d83ac1a584d6c45cf609f5fe7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memItemLeft" align="right" valign="top"><a id="ae66f6b31b5ad750f1fe042a706a4e3d4"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>main</b> ()</td></tr>
+<tr class="memitem:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a> ()</td></tr>
 <tr class="separator:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a6b41f9acb016dd748cdc43438c976163"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classL298.html">L298</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a6b41f9acb016dd748cdc43438c976163">Motor</a></td></tr>
+<tr class="separator:a6b41f9acb016dd748cdc43438c976163"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Program demonstrates using UART to control the input and output ports of the Arduino. </p>
+<div class="textblock"><p>This is the main file for Lab 5. It declares the motor object and calls the appropriate functions to complete the required task. </p>
 <dl class="section author"><dt>Author</dt><dd>Pratik Kunkolienker </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>27 March 2019</dd></dl>
-<p>This program was made to run on the ATMEGA328p running at 16MHz. At boot, it sends out simplistic menu </p>
-</div></div><!-- contents -->
+<p>This program was written has two versions. One compiled in C that uses functions. The other, compiled in CPP and uses classes. The main loop initializes the timer and calls the appropriate function such as circ and square turn. </p>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a734bbab06e1a9fd2e5522db0221ff6e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a734bbab06e1a9fd2e5522db0221ff6e3">&#9670;&nbsp;</a></span>BAUDRATE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BAUDRATE&#160;&#160;&#160;9600</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>UART baudrate </p>
+
+</div>
+</div>
+<a id="a0fac869d83ac1a584d6c45cf609f5fe7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fac869d83ac1a584d6c45cf609f5fe7">&#9670;&nbsp;</a></span>PRESCALER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PRESCALER&#160;&#160;&#160;F_CPU/(<a class="el" href="main_8c.html#a734bbab06e1a9fd2e5522db0221ff6e3">BAUDRATE</a>*16UL)-1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>UART baudrate prescaler </p>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ae66f6b31b5ad750f1fe042a706a4e3d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae66f6b31b5ad750f1fe042a706a4e3d4">&#9670;&nbsp;</a></span>main()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int main </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Main function that uses the Motor object to complete the tasks stated in the problem statement </p><dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a6b41f9acb016dd748cdc43438c976163"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b41f9acb016dd748cdc43438c976163">&#9670;&nbsp;</a></span>Motor</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classL298.html">L298</a> Motor</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Create a motor object that contains the initilization function and movement functions </p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
