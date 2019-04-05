@@ -2,7 +2,7 @@
 TARGET=main
 # Change port
 PORT = /dev/ttyACM0
-DEPENDENCIES = LM298.c
+DEPENDENCIES = L298.c
 
 CC = avr-gcc
 CFLAGS = -g -Wall -Os -I./
@@ -18,7 +18,7 @@ OBJCOPY = avr-objcopy
 all:$(TARGET).hex
 
 # This is  the first dependancy, thus the base file name needs to be passed in (?)
-$(TARGET).o: $(TARGET).c uart.c LM298.c
+$(TARGET).o: $(TARGET).c $(DEPENDENCIES)
 	@ $(CC) $(CFLAGS) -mmcu=$(DEVICE) -DF_CPU=$(FREQ) $(TARGET).c $(DEPENDENCIES) -o $(TARGET).o
 
 # The '%'' sign makes the Make file more generic, can be replaced by $(TARGET)
