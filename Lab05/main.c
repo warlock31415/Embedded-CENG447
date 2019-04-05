@@ -84,8 +84,20 @@ int main(){
 
 	//Initialize motor with a fixed clock cycle
 	Motor.init(5);
+
+	//
+	Motor.forward(100);
+	_delay_ms(2000);
+	Motor.back(50);
+	_delay_ms(2000);
+	Motor.turn_left(100);
+	_delay_ms(2000);
+	Motor.turn_right(50);
+	_delay_ms(4000);
+	Motor.square_turn(50);
+	_delay_ms(2000);
 	// Go in a circle
-	Motor.turn_left(80);
+	Motor.circ();
 
 	while(1){
 	}
