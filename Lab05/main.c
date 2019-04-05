@@ -85,7 +85,7 @@ int main(){
 	//Initialize motor with a fixed clock cycle
 	Motor.init(5);
 	// Go in a circle
-	Motor.circ();
+	Motor.turn_left(80);
 
 	while(1){
 	}
