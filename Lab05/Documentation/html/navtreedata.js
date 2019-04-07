@@ -1,6 +1,6 @@
 var NAVTREE =
 [
-  [ "Timers and Motor Cont", "index.html", [
+  [ "PWM and Motor control", "index.html", [
     [ "Introduction", "index.html#Introduction", null ],
     [ "Video", "index.html#Video", null ],
     [ "Document", "index.html#Document", null ],

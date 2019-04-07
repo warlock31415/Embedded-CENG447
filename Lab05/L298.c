@@ -135,19 +135,19 @@ void L298::back(int speed){
 **/
 void L298::square_turn(int speed){
 	forward(speed);
-	_delay_ms(3000);
-	turn_right(speed);
 	_delay_ms(1000);
-	forward(speed);
-	_delay_ms(3000);
 	turn_right(speed);
-	_delay_ms(1000);
+	_delay_ms(1000/2);
 	forward(speed);
-	_delay_ms(3000);
+	_delay_ms(1000);
 	turn_right(speed);
-	_delay_ms(1000);
+	_delay_ms(1000/2);
 	forward(speed);
-	_delay_ms(3000);
+	_delay_ms(1000);
+	turn_right(speed);
+	_delay_ms(1000/2);
+	forward(speed);
+	_delay_ms(1000);
 	init(0);
 
 }

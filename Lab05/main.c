@@ -19,8 +19,7 @@
  *          Lab 5's goal was use Timer0 to generate a PWM signal to run the 
  *			motors on the Elegoo robot using the LM298 motor controller module 
  *			and the provided header file. The source code can be found 
- *			<a href="https://github.com/warlock31415/Embedded-CENG447/tree/u
- *			se_classes/Lab05">here</a>
+ *			<a href="https://github.com/warlock31415/Embedded-CENG447/tree/master/Lab05">here</a>
  *			
  *			The clock is set according to the following table:
  *			Set # 	|	Prescaler
@@ -38,10 +37,10 @@
  *			frequency of the PWM according to the table above.
  *
  * @section Video
- * Please follow <a href="https://youtu.be/2wUh4nnQhK4">this link</a>
+ * Please follow <a href="https://photos.app.goo.gl/mHPKNQDd5JPLRGjX9">this link</a>
  * 			
  * @section Document
- * Download the PDF by clicking <a href="./Lab4.pdf"> here</a>
+ * Download the PDF by clicking <a href="./Lab_5.pdf"> here</a>
  *
  * @section Issues
  *-# Half power
@@ -92,9 +91,9 @@ int main(){
 	_delay_ms(2000);
 	Motor.turn_left(100);
 	_delay_ms(2000);
-	Motor.turn_right(50);
+	Motor.turn_right(80);
 	_delay_ms(4000);
-	Motor.square_turn(50);
+	Motor.square_turn(80);
 	_delay_ms(2000);
 	// Go in a circle
 	Motor.circ();
