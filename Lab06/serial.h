@@ -1,4 +1,4 @@
-#ifdef SERIAL_H
+#ifndef SERIAL_H
 #define SERIAL_H
 	
 
@@ -11,11 +11,10 @@
 
 
 	void ioinit();
-	static int uart_putchar(char c, FILE *stream);
-	uint8_t uart_getchar(void);
+	static void uart_putchar(char c, FILE *stream);
+	char uart_getchar(void);
 
 
 	static FILE mystdout = FDEV_SETUP_STREAM(uart_putchar, NULL, _FDEV_SETUP_WRITE);
 	static FILE mystdin = FDEV_SETUP_STREAM(NULL,uart_getchar, _FDEV_SETUP_READ);
-
 #endif

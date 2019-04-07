@@ -9,14 +9,14 @@ int main()
 {
 
 	ioinit();
-	uint8_t Num;
+	char Num;
 
 	while(1)
 	{
 		printf("Enter a number:");
-		scanf("%d",&Num);
+		scanf("%c",&Num);
 
-		printf("Your number is : %d \n\r");
+		printf("Your number is : %c \n\r",Num);
 		_delay_ms(500);
 	}
 
