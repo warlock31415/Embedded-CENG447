@@ -2,9 +2,9 @@
 TARGET=main
 # Change port
 PORT = /dev/ttyACM0
-DEPENDENCIES = L298.c
+DEPENDENCIES = serial.c 
 
-CC = avr-g++
+CC = avr-gcc
 CFLAGS = -g -Wall -Os -I./
 # Chage this if using a different chip also change frequency if required
 DEVICE = atmega328p

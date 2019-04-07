@@ -1,7 +1,30 @@
+#include "serial.h"
+#include <avr/io.h>
 #include <stdio.h>
 
-#include <avr/io.h>
-#include <util/delay.h>
+void ioinit()
+{
+	DDRD = 0b11111010;
 
-#define BAUD 9600
-#define MYUBT F_CPU/16/BAUD-1
+	UBRR0H = MYUBRR>>8;
+	UBRR0L = MYUBRR;
+	UCSR0B = (1<<RXEN0)|(1<<TXEN0);
+
+	stdout = &mystdout;
+	stdin = &mystdin;
+}
+
+static int uart_putchar(char c, FILE *stream)
+{
+	if(c=='\n') uart_putchar('\r',stream);
+	loop_until_bit_is_set(UCSR0A,UDRE0);
+	UDR0 = c;
+	return;
+}
+
+uint8_t uart_getchar(void)
+{
+    while(!(UCSR0A &(1<<RXC0)));
+    return(UDR0);
+}
+
