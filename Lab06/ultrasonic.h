@@ -7,7 +7,7 @@
 
 	void distance_init();
 	void distance_trigger();
-	void distance_receive();
+	int distance_receive();
 
 
 

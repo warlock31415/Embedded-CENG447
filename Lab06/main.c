@@ -11,6 +11,7 @@ volatile int timer =0;
 
 int main()
 {
+	int distance;
 
 	ioinit();
 	sei();
@@ -19,9 +20,8 @@ int main()
 	while(1){
 		_delay_ms(250);
 		distance_trigger();
-		distance_receive();
+		 distance = distance_receive();
 
-		int distance = timer/116;
 		printf("timer=%d\r\n",distance);
 	}
 }

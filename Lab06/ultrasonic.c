@@ -27,11 +27,12 @@ void distance_trigger(){
 	PORTC &= ~(1<<US_TRIG);
 }
 
-void distance_receive(){
+int distance_receive(){
 	loop_until_bit_is_set(PINC,US_ECHO);
-	TCNT = 0;
+	TCNT1 = 0;
 	loop_until_bit_is_clear(PINC,US_ECHO);
 	timer = TCNT1;
+	return timer/116;
 }
 
 
