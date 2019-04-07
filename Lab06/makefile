@@ -5,7 +5,7 @@ PORT = /dev/ttyACM0
 DEPENDENCIES = serial.c ultrasonic.c
 
 CC = avr-gcc
-CFLAGS = -g -Wall -Os -I./ 
+CFLAGS = -g -Os -I./ 
 # Chage this if using a different chip also change frequency if required
 DEVICE = atmega328p
 FREQ = 16000000UL

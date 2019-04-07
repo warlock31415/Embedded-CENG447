@@ -9,6 +9,7 @@
 	void distance_trigger();
 	int distance_receive();
 
-
+	extern volatile int timer;
+	extern volatile int flag;
 
 #endif

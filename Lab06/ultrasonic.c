@@ -5,7 +5,8 @@
 #include<avr/io.h>
 #include <avr/interrupt.h>
 
-extern volatile int timer;
+	volatile int timer;
+ 	volatile int flag;
 
 
 void distance_init(){
@@ -13,13 +14,13 @@ void distance_init(){
 	TCCR1B |= (1<<CS11); // Prescaler clk/8
 	DDRC |= (1<<US_TRIG); //set pinmode(output)
 
-	//PCICR |= (1<<PCIE1);
-	//PCIFR &= !(1<<PCIF1);
-	//PCMSK1 |= (1<<PCINT12);
+	PCICR |= (1<<PCIE1);
+	PCIFR &= ~(1<<PCIF1);
+	PCMSK1 |= (1<<PCINT12);
 }
 
 void distance_trigger(){
-	//sei();
+	sei();
 	//timer =0;
 	TCNT1 = 0;
 	PORTC |= (1<<US_TRIG);
@@ -28,14 +29,24 @@ void distance_trigger(){
 }
 
 int distance_receive(){
-	loop_until_bit_is_set(PINC,US_ECHO);
-	TCNT1 = 0;
-	loop_until_bit_is_clear(PINC,US_ECHO);
-	timer = TCNT1;
+		loop_until_bit_is_set(PINC,US_ECHO);
+		loop_until_bit_is_clear(PINC,US_ECHO);
 	return timer/116;
 }
 
-
+ISR(PCINT1_vect){
+	cli();
+	if (flag == 0)
+	{
+		TCNT1=0;
+		flag = 1;
+	}
+	else {
+		timer = TCNT1;
+		flag=0;
+	}
+	sei();
+}
 
 
 
