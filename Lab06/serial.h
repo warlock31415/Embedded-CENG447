@@ -11,7 +11,7 @@
 
 
 	void ioinit();
-	static void uart_putchar(char c, FILE *stream);
+	static int uart_putchar(char c, FILE *stream);
 	char uart_getchar(void);
 
 

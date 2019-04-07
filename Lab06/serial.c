@@ -14,11 +14,12 @@ void ioinit()
 	stdin = &mystdin;
 }
 
-static void uart_putchar(char c, FILE *stream)
+static int uart_putchar(char c, FILE *stream)
 {
 	if(c=='\n') uart_putchar('\r',stream);
 	loop_until_bit_is_set(UCSR0A,UDRE0);
 	UDR0 = c;
+	return 0;
 
 }
 
