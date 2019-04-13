@@ -5,8 +5,7 @@
  * @brief   This file contains functions declarations for using the L298 motor 
  *			driver.
  * 
- * @details	This file declares the L298 class and all the public and private 
- *			functions.
+ * @details	This file declares the L298	functions.
  *
  */
 #ifndef L298_H
@@ -18,9 +17,7 @@
 	/**
 		The L298 class object that has all the motor related functions
 	**/
-	class L298{
-	public:
-		void init(char clk);
+		void motor_init(char clk);
 		void turn_right(int speed);
 		void forward(int speed);
 		void back(int speed);
@@ -29,9 +26,7 @@
 		void square_turn(int speed);
 		void circ();
 
-	private:
 		char map(int d_cyc);
-	};
 
 
 #endif 

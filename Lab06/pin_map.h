@@ -1,6 +1,6 @@
 /**
  * @file    pin_map.h
- * @author  Pratik Kunkolienker
+ * @author  Remington Bullis
  * @date    27 March 2019
  * @brief   This file contains functions declarations for using the L298 motor 
  *			driver.

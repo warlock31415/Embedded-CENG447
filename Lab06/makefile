@@ -2,7 +2,7 @@
 TARGET=main
 # Change port
 PORT = /dev/ttyACM0
-DEPENDENCIES = serial.c ultrasonic.c
+DEPENDENCIES = ultrasonic.c L298.c
 
 CC = avr-gcc
 CFLAGS = -g -Os -I./ 
@@ -19,7 +19,7 @@ all:$(TARGET).hex
 
 # This is  the first dependancy, thus the base file name needs to be passed in (?)
 $(TARGET).o: $(TARGET).c $(DEPENDENCIES)
-	 $(CC) $(CFLAGS) -mmcu=$(DEVICE) -DF_CPU=$(FREQ) $(TARGET).c $(DEPENDENCIES) -o $(TARGET).o>log.txt
+	@ $(CC) $(CFLAGS) -mmcu=$(DEVICE) -DF_CPU=$(FREQ) $(TARGET).c $(DEPENDENCIES) -o $(TARGET).o
 
 # The '%'' sign makes the Make file more generic, can be replaced by $(TARGET)
 # $< is the dependancy and $@ is the target file

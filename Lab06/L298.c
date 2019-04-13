@@ -24,7 +24,7 @@
 * @returns  void
 **/
 
-void L298::init(char clk){
+void motor_init(char clk){
 	TCCR0A |= (1<<COM0A1); //Clear OC0A on compare match
 	TCCR0A |= (1<<COM0B1); //Clear OC0B on compare match
 
@@ -50,7 +50,7 @@ void L298::init(char clk){
 * @param [in] 	duty_cyc Percentage of max speed
 * @returns  char duty_cyc*255/100
 **/
- char L298::map(int duty_cyc)
+ char map(int duty_cyc)
 {
 	return duty_cyc*255/100;
 }
@@ -63,7 +63,7 @@ void L298::init(char clk){
 *@param [in] speed A percentage of max speed 0-100%
 * @returns  void
 **/
-void L298::turn_right(int speed){
+void turn_right(int speed){
 
 	PORTD |= (1<<H_IN1);
 	PORTB &= ~(1<<H_IN2); 
@@ -81,7 +81,7 @@ void L298::turn_right(int speed){
 *@param [in] speed A percentage of max speed 0-100%
 * @returns  void
 **/
-void L298::forward(int speed){
+void forward(int speed){
 	PORTD |= (1<<H_IN1);
 	PORTB &= ~(1<<H_IN2); 
 	PORTB |= (1<<H_IN4);
@@ -99,7 +99,7 @@ void L298::forward(int speed){
 *@param [in] speed A percentage of max speed 0-100%
 * @returns  void
 **/
-void  L298::turn_left(int speed){
+void  turn_left(int speed){
 	PORTD &= ~(1<<H_IN1);
 	PORTB |= (1<<H_IN2); 
 	PORTB |= (1<<H_IN4);
@@ -116,7 +116,7 @@ void  L298::turn_left(int speed){
 *@param [in] speed A percentage of max speed 0-100%
 * @returns  void
 **/
-void L298::back(int speed){
+void back(int speed){
 	PORTD &= ~(1<<H_IN1);
 	PORTB |= (1<<H_IN2); 
 	PORTB &= ~(1<<H_IN4);
@@ -133,7 +133,7 @@ void L298::back(int speed){
 *@param [in] speed A percentage of max speed 0-100%
 * @returns  void
 **/
-void L298::square_turn(int speed){
+void square_turn(int speed){
 	forward(speed);
 	_delay_ms(1000);
 	turn_right(speed);
@@ -148,7 +148,7 @@ void L298::square_turn(int speed){
 	_delay_ms(1000/2);
 	forward(speed);
 	_delay_ms(1000);
-	init(0);
+	motor_init(0);
 
 }
 
@@ -158,7 +158,7 @@ void L298::square_turn(int speed){
 *			a relationship of the difference between the wheel speeds.
 * @returns  void
 **/
-void L298::circ()
+void circ()
 {
 	PORTD |= (1<<H_IN1);
 	PORTB &= ~(1<<H_IN2); 
