@@ -1,5 +1,6 @@
 <map id="pin_map.h" name="pin_map.h">
-<area shape="rect" id="node2" href="$L298_8h.html" title="This file contains functions declarations for using the L298 motor driver. " alt="" coords="5,80,67,107"/>
-<area shape="rect" id="node3" href="$L298_8c.html" title="This file contains functions for using the L298 motor driver. " alt="" coords="39,155,100,181"/>
-<area shape="rect" id="node4" href="$ultrasonic_8c.html" title="This file contains functions declarations for using the ultrasonic. " alt="" coords="142,80,231,107"/>
+<area shape="rect" id="node2" href="$L298_8h.html" title="This file contains functions declarations for using the L298 motor driver. " alt="" coords="48,80,109,107"/>
+<area shape="rect" id="node3" href="$L298_8c.html" title="This file contains functions for using the L298 motor driver. " alt="" coords="5,155,67,181"/>
+<area shape="rect" id="node4" href="$main_8c.html" title="This is the main file for Lab 6. " alt="" coords="103,155,164,181"/>
+<area shape="rect" id="node5" href="$ultrasonic_8c.html" title="This file contains functions declarations for using the ultrasonic. " alt="" coords="185,80,274,107"/>
 </map>

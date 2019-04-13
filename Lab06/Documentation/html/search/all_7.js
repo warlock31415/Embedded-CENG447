@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['map',['map',['../L298_8c.html#a384590afb81bcb48b1080193e9a97672',1,'map(int duty_cyc):&#160;L298.c'],['../L298_8h.html#af25dd84b12e9622980c88ed834f1e4f6',1,'map(int d_cyc):&#160;L298.c']]],
-  ['motor_5finit',['motor_init',['../L298_8c.html#aff207ef6f6a0094036287896441f6503',1,'motor_init(char clk):&#160;L298.c'],['../L298_8h.html#aff207ef6f6a0094036287896441f6503',1,'motor_init(char clk):&#160;L298.c']]]
+  ['l298_2ec',['L298.c',['../L298_8c.html',1,'']]],
+  ['l298_2eh',['L298.h',['../L298_8h.html',1,'']]],
+  ['led',['LED',['../pin__map_8h.html#aeb7a7ba1ab7e0406f1b5ab36d579f585',1,'pin_map.h']]]
 ];

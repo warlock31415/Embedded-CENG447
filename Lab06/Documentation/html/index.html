@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PWM and Motor control: Main Page</title>
+<title>Counters and Ultrasonic Sensors: Main Page</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -28,8 +28,8 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">PWM and Motor control
-   &#160;<span id="projectnumber">Lab05</span>
+   <div id="projectname">Counters and Ultrasonic Sensors
+   &#160;<span id="projectnumber">Lab06</span>
    </div>
   </td>
  </tr>
@@ -81,10 +81,32 @@ $(document).ready(function(){initNavTree('index.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">PWM and Motor control Documentation</div>  </div>
+<div class="title">Counters and Ultrasonic Sensors Documentation</div>  </div>
 </div><!--header-->
 <div class="contents">
-</div><!-- contents -->
+<div class="textblock"><h1><a class="anchor" id="Introduction"></a>
+Introduction</h1>
+<p>This will serve as documentation for lab 6 for the CENG447: Embedded systems classes for the Spring of 2019.</p>
+<p>Lab 6's goal was use Timer1 to count the duration of the pulse width of the echo pulse on the ultrasonic sensor and to generate an accurate 10ms trigger signal. As always the source code can be found <a href="https://github.com/warlock31415/Embedded-CENG447/tree/master/Lab06">here</a></p>
+<p>A clk/8 prescaler was used to get a tick every 0.5ms. This meant that in order to generate a 10ms pulse we'd have to count 20 ticks. To count the pulse width of the return pulse, a pin change interrupt was used. The pin change interrupt triggers on both falling and rising edges so accurate track must be kept of which event caused interrupt. A flag was used to do this. On a rising edge, the flag is set to 1 and TCNT1 is set to 0. On a falling edge, the flag is cleared and the vlaue in TCNT1 is read.</p>
+<p>While this is happening, The program first waits for the ECHO pin to read high and then waits for the pin to go low again (The interrupt occures during this wait). It then returns the value that was read from TCNT1 and divides it by 116.</p>
+<p>The division factor was obtained from the datasheet of the sensor. But since every tick is 0.5ms we must first divide it by 2 to get the time elapse in ms and then divide it by 58 (datasheet value) to get the distance.</p>
+<h1><a class="anchor" id="Video"></a>
+Video</h1>
+<p>The robot can be seen measuring distances <a href="https://photos.app.goo.gl/2ECBMUaLxQM8WiUg8">here</a></p>
+<p>The robot can be seen keep it's distance from the wall <a href="https://photos.app.goo.gl/sDKsXncgCjGFD5kz8">here</a> </p>
+<h1><a class="anchor" id="Document"></a>
+Document</h1>
+<p>Download the PDF by clicking <a href="./Lab_6.pdf">here</a></p>
+<h1><a class="anchor" id="Issues"></a>
+Issues</h1>
+<ol type="1">
+<li>Broken US<ul>
+<li>The initial ultrasonic sensor was broken and had to replaced. </li>
+</ul>
+</li>
+</ol>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

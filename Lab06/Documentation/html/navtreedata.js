@@ -1,6 +1,10 @@
 var NAVTREE =
 [
-  [ "PWM and Motor control", "index.html", [
+  [ "Counters and Ultrasonic Sensors", "index.html", [
+    [ "Introduction", "index.html#Introduction", null ],
+    [ "Video", "index.html#Video", null ],
+    [ "Document", "index.html#Document", null ],
+    [ "Issues", "index.html#Issues", null ],
     [ "Data Structures", "annotated.html", [
       [ "Data Structures", "annotated.html", "annotated_dup" ],
       [ "Data Structure Index", "classes.html", null ],
