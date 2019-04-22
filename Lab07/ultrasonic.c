@@ -8,7 +8,6 @@
  */
 
 #include "ultrasonic.h"
-#include "pin_map.h"
 #include<avr/io.h>
 #include <avr/interrupt.h>
 

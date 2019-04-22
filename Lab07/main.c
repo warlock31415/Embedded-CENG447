@@ -26,48 +26,36 @@
  *			As always the source code can be found 
  *          <a href="https://github.com/warlock31415/Embedded-CENG447/tree/master/Lab07">here</a>
  *			
- *			A clk/8 prescaler was used to get a tick every 0.5ms. This meant 
- *			that in order to generate a 10ms pulse we'd have to count 20 ticks.
- *			To count the pulse width of the return pulse, a pin change interrupt
- *			was used. The pin change interrupt triggers on both falling and
- *			rising edges so accurate track must be kept of which event caused
- *			interrupt. A flag was used to do this. On a rising edge, the flag is
- *			set to 1 and TCNT1 is set to 0. On a falling edge, the flag is 
- *			cleared and the vlaue in TCNT1 is read.
- *			
- *			While this is happening, The program first waits for the ECHO pin to
- *			read high and then waits for the pin to go low again (The interrupt
- *			occures during this wait). It then returns the value that was read 
- *			from TCNT1 and divides it  by 116. 
-
- *			The division factor was obtained from the datasheet of the sensor. 
- *			But since every tick is 0.5ms we must first divide it by 2 to get
- *			the time elapse in ms and then divide it by 58 (datasheet value) to
- *			get the distance.
  *			
  *
  * @section Video
- * The robot can be seen measuring distances 
- * <a href="https://photos.app.goo.gl/2ECBMUaLxQM8WiUg8">here</a>
- *
- * The robot can be seen keep it's distance from the wall 
- *	<a href="https://photos.app.goo.gl/sDKsXncgCjGFD5kz8">here</a> 
- 			
+ * Click
+ * <a href="https://photos.app.goo.gl/kkpiPfTJJEt94HqN7">here</a> for the link
+ * to the video
+ *			
  * @section Document
- * Download the PDF by clicking <a href="./Lab_6.pdf"> here</a>
+ * Download the PDF by clicking <a href="./Lab_7.pdf"> here</a>
  *
  * @section Issues
- *-# Broken US
- *    + The initial ultrasonic sensor was broken and had to replaced. 
+ *-# Broken servo
+ *    + The servo cracked during testing so had to be replaced. 
  */
 
 
 #include<avr/io.h>
-#include<avr/interrupt.h>
 #include "servo.h"
 #include<util/delay.h>
 #include "ultrasonic.h"
 #include "serial.h"
+
+
+/**
+* @details Initializes the Serial, ultrasonic sensor and the servo. Then does
+*			a 0-180 degree sweep whilst taking distance measurements.And then 
+*			goes to the centered, CCW and CW positions on the servo.
+*			
+* @returns void
+**/
 
 
  int main()
