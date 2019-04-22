@@ -2,10 +2,10 @@
 TARGET=main
 # Change port
 PORT = /dev/ttyACM0
-DEPENDENCIES = ultrasonic.c L298.c
+DEPENDENCIES = ultrasonic.c servo.c serial.c
 
 CC = avr-gcc
-CFLAGS = -g -Os -I../lib 
+CFLAGS = -g -Os -I./ 
 # Chage this if using a different chip also change frequency if required
 DEVICE = atmega328p
 FREQ = 16000000UL
@@ -15,10 +15,10 @@ PROGRAMMER = arduino
 OBJCOPY = avr-objcopy
 
 
-all:$(TARGET).hex $(DEPENDENCIES)
+all:$(TARGET).hex
 
 # This is  the first dependancy, thus the base file name needs to be passed in (?)
-$(TARGET).o: $(TARGET).c 
+$(TARGET).o: $(TARGET).c $(DEPENDENCIES)
 	@ $(CC) $(CFLAGS) -mmcu=$(DEVICE) -DF_CPU=$(FREQ) $(TARGET).c $(DEPENDENCIES) -o $(TARGET).o
 
 # The '%'' sign makes the Make file more generic, can be replaced by $(TARGET)

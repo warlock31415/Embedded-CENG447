@@ -1,7 +1,7 @@
 /**
  * @file    main.c
  * @author  Pratik Kunkolienker
- * @date    27 March 2019
+ * @date    22 April 2019
  * @brief   This is the main file for Lab 6.
  *
  * @details This is the entrypont for the code. It calls all the other functions
@@ -11,13 +11,20 @@
 
 /** @mainpage
  * @section Introduction
- *          This will serve as documentation for lab 6 for the CENG447: Embedded
+ *          This will serve as documentation for lab 7 for the CENG447: Embedded
  *			systems classes for the Spring of 2019.
  *
- *          Lab 6's goal was use Timer1 to count the duration of the pulse width
- *			of the echo pulse on the ultrasonic sensor and to generate an 
- *			accurate 10ms trigger signal. As always the source code can be found 
- *			<a href="https://github.com/warlock31415/Embedded-CENG447/tree/master/Lab06">here</a>
+ *          Servos are used in a variety of applications for actuation 
+ *			purposes. Hobby servos are a cheap way to add motion to projects
+ *			that require precise positioning and not much torque. Such as 
+ *			actuating the pylons on a model airplane or waving hello using a 
+ *			robot hand. The servos being used in the lab are micro servos and 
+ *			cover a 0-180 degree arc. The standard micro servos require a 50Hz 
+ *			signal with a $\approx$ 1-2ms on time. Since timers 0 and 1 on the 
+ *			ATMEGA328P are taken up by the wheels and ultrasonic respectively 
+ *			the only way to achieve this is by using the 8-bit Timer/counter2. 
+ *			As always the source code can be found 
+ *          <a href="https://github.com/warlock31415/Embedded-CENG447/tree/master/Lab07">here</a>
  *			
  *			A clk/8 prescaler was used to get a tick every 0.5ms. This meant 
  *			that in order to generate a 10ms pulse we'd have to count 20 ticks.
@@ -53,91 +60,36 @@
  *-# Broken US
  *    + The initial ultrasonic sensor was broken and had to replaced. 
  */
-#include <avr/io.h>
-#include <util/delay.h>
-#include "ultrasonic.h"
+
+
+#include<avr/io.h>
 #include<avr/interrupt.h>
-#include "pin_map.h"
-#include "L298.h"
-
-/// P gain of the PID controller
-#define kp 2
-
-/// I gain of the PID controller
-#define ki 0
-
-/// D gain of the PID controller
-#define kd 1
-
-/// Set point for the PID loop
-#define set_point 8
-
-void pid();
+#include "servo.h"
+#include<util/delay.h>
+#include "ultrasonic.h"
+#include "serial.h"
 
 
-/**
-* @details initializes the timer and the motor controller
-* @returns void
-**/
-
-
-int main()
+ int main()
 {
-	int distance;
-	//ioinit();
-	sei();
+
+	int i=0;
+	servo_init();
 	distance_init();
-	motor_init(5);
-
-	while(1){
-		_delay_ms(250);
-		pid();
-	}
-}
-
-
- /**
- * @details This function handles the pid control. The function makes
- 			sure that the robot stays at the set point.
- * @returns void
- *
- *
- */
-void pid(){
-	unsigned short integral =0;
-	unsigned short derivative =0;
-	unsigned short last_error =0;
-	char pwm;
-	distance_trigger();
-	int current_position = distance_receive();
-	while(current_position!=set_point){
-
-		distance_trigger();
-		current_position = distance_receive();
-		int error = -(set_point-current_position);
-
-		integral = integral+error;
-
-		derivative = error - last_error;
-
-		pwm = (kp*error)+(ki*integral)+(kd*derivative);
-		//printf("pwm=%d -> distance = %d\n",pwm,current_position);
-
-		if(pwm>100) pwm = 100;
-		else if (pwm<-100) pwm = -100;
-
-
-		if(pwm>0){
-			forward(pwm);
+	ioinit();
+	while(1)
+	{
+		for(i=0;i<=180;i++){
+			printf("Position:%d",i);
+			servo_position(i);
+			printf(" sensor value: %d\n",distance_receive());		
 		}
-		else if (pwm<0)back(pwm);
-
-		else motor_init(0);
-
-		last_error = error;
-		//_delay_ms(250);
+	servo_position(90);
+	_delay_ms(1000);
+	servo_position(180);
+	_delay_ms(1000);
+	servo_position(0);
+	_delay_ms(1000);
 	}
-
-
-
+	return 1;
 }
