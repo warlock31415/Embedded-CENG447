@@ -4,9 +4,8 @@
  * @date    22 April 2019
  * @brief   This is the main file for Lab 6.
  *
- * @details This is the entrypont for the code. It calls all the other functions
- *			to get the robot moving. In this case it implements a pid loop that
- *			has the robot maintian a certain distance from an object.
+ * @details This is the entry point for the code. It initializes the required
+ *			peripherals and the timers.
  */
 
 /** @mainpage
@@ -20,7 +19,7 @@
  *			actuating the pylons on a model airplane or waving hello using a 
  *			robot hand. The servos being used in the lab are micro servos and 
  *			cover a 0-180 degree arc. The standard micro servos require a 50Hz 
- *			signal with a $\approx$ 1-2ms on time. Since timers 0 and 1 on the 
+ *			signal with a approximately 1-2ms on time. Since timers 0 and 1 on the 
  *			ATMEGA328P are taken up by the wheels and ultrasonic respectively 
  *			the only way to achieve this is by using the 8-bit Timer/counter2. 
  *			As always the source code can be found 

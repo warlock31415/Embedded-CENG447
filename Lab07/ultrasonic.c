@@ -15,7 +15,7 @@
 /// Structure that contains the pulse length and the flag for PCINT1
 struct timer_stat
 	{
-	// Stores the pulse 2*pulse length in ms
+	/// Stores the 2*pulse length in ms
 	volatile unsigned int timer;
 	/// Checks the PCINT was triggered by a falling edge or a rising edge
  	volatile unsigned int flag;

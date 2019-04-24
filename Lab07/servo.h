@@ -7,12 +7,11 @@
  * @details This is the header file for the servo library. Change the max and 
  *			min servo values here as required.
   */
-
+///Checks if the required dependancies were included
 #ifndef SERVO_h
 #define SERVO_H
 
 	#include<avr/io.h>
-    #include "pin_map.h"
 	///Minimum allowable OCR2B value
 	#define SERVO_MIN 5.0
 	///Maximum permissible OCR2B value. If 19 is used a noticeable voltage drop
