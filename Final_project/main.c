@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define set_point 15
+#define set_point 12
 
 #define kp 2
 
@@ -36,12 +36,13 @@ void third_bend(enum boolean side);
 
 int main(){
 	init();
+	while(get_distance()<0){};
 	char prev_control = NULL;
 	int pwm;
 	uint8_t error=0;
 
 	forward(50);
-	_delay_ms(200);
+	_delay_ms(400);
 	forward(0);
 	start();
 	while(1){
@@ -72,9 +73,9 @@ return distance_trigger();
 void BTcontrol(){
 	forward(0);
 	char control = NULL;
-	scanf("%c", &control);
-	BTcontrol(control);
+
 	while(1){
+	scanf("%c", &control);
 	switch(control){
 		case 'w' :
 			forward(50);
@@ -128,7 +129,7 @@ void first_bend(){
 	else 
 	{
 		turn_right(100);
-		_delay_ms(500);
+		_delay_ms(450);
 		side = right;
 	}
 	forward(0);
@@ -179,7 +180,7 @@ void third_bend(enum boolean side){
 	else
 	{
 		turn_right(90);
-		_delay_ms(350);	
+		_delay_ms(500);	
 	}
 
 	forward(80);
@@ -232,6 +233,7 @@ void pid()
 		_delay_ms(250);
 	}
 }
+
 
 ISR(TIMER0_OVF_vect)
 {	
